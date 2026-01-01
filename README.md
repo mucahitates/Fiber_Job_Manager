@@ -1,0 +1,135 @@
+# FiberJobManager
+
+FiberJobManager, Almanya’daki yer altı internet kablo döşeme projelerinde  
+**iş takibini, revizyon kayıtlarını ve ekip yönetimini** kolaylaştırmak için geliştirilmiş bir sistemdir.
+
+🎯 Amaç:  
+DXF / CSV tabanlı saha işlerinde:
+
+- ✔️ İşlerin kime atandığını görmek  
+- ✔️ Revizyon tarihçesini izlemek  
+- ✔️ Hangi kullanıcı neyi değiştirdi kaydetmek  
+- ✔️ Merkezi, çok kullanıcılı bir yapı sağlamak  
+
+---
+
+## 🚀 Özellikler
+
+### 👤 Kullanıcı Yönetimi
+- Admin & Worker rolleri
+- Kullanıcı ekleme / güncelleme / silme
+- Silinen kullanıcıya bağlı işlerin devredilmesi
+
+### 📌 İş Yönetimi
+- İş oluşturma
+- Kullanıcıya atama
+- Durum değiştirme (Pending / InProgress / Done)
+- Tüm kullanıcılar tüm işleri görebilir
+- Sadece **atanmış kullanıcı** güncelleme yapabilir  
+  (Admin her şeyi yönetebilir)
+
+### 📝 Revizyon & Geçmiş
+
+- Manuel revizyon notları ekleme
+- **Otomatik revizyon kaydı**
+  - İş güncellendiğinde
+- İş bazlı history görüntüleme
+
+---
+
+## 🛠️ Kullanılan Teknolojiler
+
+| Teknoloji | Amaç |
+|----------|------|
+| **ASP.NET Core Web API** | Backend API |
+| **Entity Framework Core** | ORM (MySQL ile iletişim) |
+| **MySQL** | Veritabanı |
+| **Swagger (OpenAPI)** | API test & dokümantasyon |
+| **JWT (planlı)** | Kimlik doğrulama |
+| **WPF / Blazor Hybrid (planlı)** | Masaüstü arayüz |
+
+---
+
+## 📂 Proje Yapısı
+
+FiberJobManager.Api
+│
+├── Controllers # API uç noktaları
+│ ├── JobsController.cs
+│ ├── UsersController.cs
+│ └── RevisionsController.cs
+│
+├── Data
+│ └── ApplicationDbContext.cs # Veritabanı erişimi
+│
+├── Models
+│ ├── Job.cs
+│ ├── User.cs
+│ └── Revision.cs
+│
+├── Migrations # EF Core migration dosyaları
+│
+└── Program.cs # Uygulama başlangıç noktası
+
+⚙️ Kurulum
+
+### 1️⃣ Bağımlılıkları yükle
+```bash
+dotnet restore
+
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost;Database=fiber_db;User=root;Password=1234;"
+}
+
+dotnet ef database update
+dotnet run
+http://localhost:5210/swagger
+
+
+🔌 API Özet
+
+👤 USERS
+
+| Method | Endpoint               | Açıklama                         |
+| ------ | ---------------------- | -------------------------------- |
+| GET    | `/api/users`           | Tüm kullanıcılar                 |
+| GET    | `/api/users/{id}`      | Kullanıcı getir                  |
+| POST   | `/api/users`           | Yeni kullanıcı ekle              |
+| PUT    | `/api/users/{id}`      | Kullanıcı güncelle               |
+| DELETE | `/api/users/{id}`      | Kullanıcı sil (işler boşa düşer) |
+| GET    | `/api/users/{id}/jobs` | Kullanıcıya atanmış işler        |
+
+📌 JOBS
+
+| Method | Endpoint                            | Açıklama                                                    |
+| ------ | ----------------------------------- | ----------------------------------------------------------- |
+| GET    | `/api/jobs`                         | Tüm işler                                                   |
+| GET    | `/api/jobs/{id}`                    | İş detay                                                    |
+| POST   | `/api/jobs`                         | Yeni iş aç                                                  |
+| PUT    | `/api/jobs/{jobId}/update/{userId}` | **Yetkili güncelleme** (Worker kendi işini / Admin her işi) |
+| POST   | `/api/jobs/{jobId}/assign/{userId}` | İş atama                                                    |
+| GET    | `/api/jobs/{jobId}/revisions`       | İş geçmişi                                                  |
+
+
+📝 REVISIONS
+
+| Method | Endpoint         | Açıklama             |
+| ------ | ---------------- | -------------------- |
+| POST   | `/api/revisions` | Manuel revizyon ekle |
+
+
+🔐 Yakında: Login & Security
+
+Planlanan geliştirmeler:
+
+* Kullanıcı girişi
+
+* JWT Token
+
+* Role-based authorization
+
+* Masaüstü (WPF / Blazor Hybrid) arayüz
+
+* DXF / CSV dosya yönetimi
+
+
