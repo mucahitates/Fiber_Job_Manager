@@ -51,7 +51,7 @@ DXF / CSV tabanlı saha işlerinde:
 ---
 
 ## 📂 Proje Yapısı
-
+```
 FiberJobManager.Api
 │
 ├── Controllers # API uç noktaları
@@ -70,11 +70,11 @@ FiberJobManager.Api
 ├── Migrations # EF Core migration dosyaları
 │
 └── Program.cs # Uygulama başlangıç noktası
-
+```
 ⚙️ Kurulum
 
 ### 1️⃣ Bağımlılıkları yükle
-```bash
+bash
 dotnet restore
 
 "ConnectionStrings": {
