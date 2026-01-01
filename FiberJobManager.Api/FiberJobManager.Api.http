@@ -1,0 +1,6 @@
+@FiberJobManager.Api_HostAddress = http://localhost:5210
+
+GET {{FiberJobManager.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
