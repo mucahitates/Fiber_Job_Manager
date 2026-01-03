@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using FiberJobManager.Desktop.Models;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
+
 
 namespace FiberJobManager.Desktop
 {
@@ -33,7 +35,13 @@ namespace FiberJobManager.Desktop
         public MainWindow()
         {
             InitializeComponent();
+            
             SetupPlaceholders();
+
+            //Beni hatırla butonu için eklendi
+            txtEmail.Text = Properties.Settings.Default.SavedEmail;
+
+            chkRemember.IsChecked = !string.IsNullOrEmpty(txtEmail.Text);
         }
 
         private void SetupPlaceholders()
@@ -68,11 +76,26 @@ namespace FiberJobManager.Desktop
             var email = txtEmail.Text?.Trim();
             var password = txtPassword.Password;
 
+            var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+            if (!Regex.IsMatch(txtEmail.Text, emailPattern))
+            {
+                lblInfo.Text = "Geçerli bir e-mail formatı girin (ör: example@mail.com)";
+                txtEmail.BorderBrush = Brushes.Red;
+                return;
+            }
+            else
+            {
+                txtEmail.ClearValue(Border.BorderBrushProperty);
+            }
+
+
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
                 lblInfo.Text = "Lütfen email ve şifrenizi girin.";
                 return;
             }
+            
 
             try
             {
@@ -106,7 +129,20 @@ namespace FiberJobManager.Desktop
                 Settings.UserId = data.UserId;
                 Settings.UserName = data.UserName;
                 Settings.Role = data.Role;
-               // Settings.Save();
+                // Settings.Save();
+
+                // BENİ HATIRLA buraya eklenmesinin nedeni sadece data deserialize edilirise hatırlaması için
+                if (chkRemember.IsChecked == true)
+                {
+                    Properties.Settings.Default.SavedEmail = txtEmail.Text;
+                    Properties.Settings.Default.Save();
+                }
+                else
+                {
+                    Properties.Settings.Default.SavedEmail = "";
+                    Properties.Settings.Default.Save();
+                }
+
 
                 // SADECE BAŞARIDA basit mesaj
                 MessageBox.Show(
@@ -134,7 +170,11 @@ namespace FiberJobManager.Desktop
 
         }
 
-
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Login_Click(sender, e);
+        }
 
 
         private void txtPassword_GotFocus(object sender, RoutedEventArgs e)
@@ -147,6 +187,29 @@ namespace FiberJobManager.Desktop
             if (string.IsNullOrEmpty(txtPassword.Password))
                 pwdPlaceholder.Visibility = Visibility.Visible;
         }
+
+        private bool passwordVisible = false;
+
+        private void Eye_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (!passwordVisible)
+            {
+                txtPasswordVisible.Text = txtPassword.Password;
+                txtPasswordVisible.Visibility = Visibility.Visible;
+                txtPassword.Visibility = Visibility.Collapsed;
+
+                passwordVisible = true;
+            }
+            else
+            {
+                txtPassword.Password = txtPasswordVisible.Text;
+                txtPasswordVisible.Visibility = Visibility.Collapsed;
+                txtPassword.Visibility = Visibility.Visible;
+
+                passwordVisible = false;
+            }
+        }
+
 
     }
 }

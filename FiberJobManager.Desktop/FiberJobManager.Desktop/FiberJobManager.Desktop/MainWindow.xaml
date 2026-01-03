@@ -88,6 +88,7 @@
                             <TextBox x:Name="txtEmail"
                                      BorderThickness="0"
                                      Background="#00000000"
+                                     CaretBrush="#4b5563"
                                      Foreground="#4B5563"
                                      FontSize="13"
                                      VerticalContentAlignment="Center"
@@ -104,7 +105,6 @@
                                Foreground="#6B7280"/>
                 </Grid>
 
-
                 <!-- PASSWORD -->
                 <Grid Margin="0 0 0 12">
                     <Grid.ColumnDefinitions>
@@ -114,49 +114,62 @@
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="1"
-                            CornerRadius="18"
-                            Background="#EDF1FF"
-                            Height="44">
+            CornerRadius="18"
+            Background="#EDF1FF"
+            Height="44">
                         <Border.Effect>
                             <DropShadowEffect Color="#FFFFFF"
-                                              BlurRadius="18"
-                                              ShadowDepth="-4"
-                                              Opacity="0.9"/>
+                              BlurRadius="18"
+                              ShadowDepth="-4"
+                              Opacity="0.9"/>
                         </Border.Effect>
 
                         <Grid Margin="16 0 12 0">
                             <TextBlock x:Name="pwdPlaceholder"
-                           Text="Password"
-                           Foreground="#9CA3AF"
-                           FontSize="13"
-                           VerticalAlignment="Center"
-                           IsHitTestVisible="False"/>
-                            
+                       Text="Password"
+                       Foreground="#9CA3AF"
+                       FontSize="13"
+                       VerticalAlignment="Center"
+                       IsHitTestVisible="False"/>
+
                             <PasswordBox x:Name="txtPassword"
-                                         BorderThickness="0"
-                                         Background="Transparent"
-                                         Foreground="#4B5563"
-                                         FontSize="13"
-                                         VerticalContentAlignment="Center"
-                                         GotFocus="txtPassword_GotFocus"
-                                         LostFocus="txtPassword_LostFocus"/>
+                         BorderThickness="0"
+                         Background="Transparent"
+                         Foreground="#4B5563"
+                         CaretBrush="#4b5563"
+                         FontSize="13"
+                         VerticalContentAlignment="Center"
+                         GotFocus="txtPassword_GotFocus"
+                         LostFocus="txtPassword_LostFocus"/>
+
+                            <!-- Şifreyi düz yazı olarak göstereceğimiz TextBox -->
+                            <TextBox x:Name="txtPasswordVisible"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 Foreground="#4B5563"
+                                 FontSize="13"
+                                 VerticalContentAlignment="Center"
+                                 Visibility="Collapsed"/>
                         </Grid>
                     </Border>
 
                     <TextBlock Grid.Column="0"
-                               Text="🔒"
-                               FontSize="16"
-                               VerticalAlignment="Center"
-                               Margin="8 0 10 0"
-                               Foreground="#6B7280"/>
+                         Text="🔒"
+                         FontSize="16"
+                           VerticalAlignment="Center"
+                           Margin="8 0 10 0"
+                           Foreground="#6B7280"/>
 
+                    <!-- 👁 ikonuna tıklama event'i EKLEDİK -->
                     <TextBlock Grid.Column="2"
-                               Text="👁"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               Margin="8 0 8 0"
-                               Foreground="#9CA3AF"/>
+                           Text="👁"
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Margin="8 0 8 0"
+                           Foreground="#9CA3AF"
+                           MouseLeftButtonDown="Eye_Click"/>
                 </Grid>
+
 
 
                 <!-- Remember + Forgot -->
@@ -203,7 +216,7 @@
                             Click="Login_Click"
                             FontSize="30" 
                             Width="300"
-                            />
+                            KeyDown="Window_KeyDown"/>
                 </Border>
 
                 <TextBlock x:Name="lblInfo"
