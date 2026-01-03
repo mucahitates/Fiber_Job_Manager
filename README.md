@@ -52,24 +52,43 @@ DXF / CSV tabanlı saha işlerinde:
 
 ## 📂 Proje Yapısı
 ```
-FiberJobManager.Api
+FiberJobManager
+├─FiberJobManager.Api
+│  │
+│  ├── Controllers # API uç noktaları
+│  │ ├── AuthController.cs
+│  │ ├── JobsController.cs
+│  │ ├── RevisionsController.cs
+│  │ ├── UsersController.cs
+│  │
+│  ├── Data
+│  │ └── ApplicationDbContext.cs # Veritabanı erişimi
+│  │
+│  ├── Models
+│  │ ├── Job.cs
+│  │ ├── User.cs
+│  │ ├── Revision.cs
+│  │ ├── LoginRequest.cs
+│  │ ├── LoginResponse.cs
+│  │
+│  ├── Migrations # EF Core migration dosyaları
+│  │
+│  └── Program.cs # Uygulama başlangıç noktası
 │
-├── Controllers # API uç noktaları
-│ ├── JobsController.cs
-│ ├── UsersController.cs
-│ └── RevisionsController.cs
+├── FiberJobManager.Desktop
+│  │
+│  ├── Controllers # API uç noktaları
+│  │ ├── MainWindow.xaml
+│  │ ├── MainWindow.xaml.cs
+│  │ ├── DashboardWindows.xaml
+│  │ ├── DashboardWindows.xaml.cs
+│  │ 
 │
-├── Data
-│ └── ApplicationDbContext.cs # Veritabanı erişimi
+├──.gitignore
 │
-├── Models
-│ ├── Job.cs
-│ ├── User.cs
-│ └── Revision.cs
-│
-├── Migrations # EF Core migration dosyaları
-│
-└── Program.cs # Uygulama başlangıç noktası
+├──README.md
+
+
 ```
 ⚙️ Kurulum
 
@@ -88,6 +107,11 @@ http://localhost:5210/swagger
 
 🔌 API Özet
 
+| Method | Endpoint          | Açıklama                           |
+| ------ | ----------------- | ---------------------------------- |
+| POST   | `/api/auth/login` | Kullanıcı giriş yapar, token döner |
+
+
 👤 USERS
 
 | Method | Endpoint               | Açıklama                         |
@@ -101,14 +125,17 @@ http://localhost:5210/swagger
 
 📌 JOBS
 
-| Method | Endpoint                            | Açıklama                                                    |
-| ------ | ----------------------------------- | ----------------------------------------------------------- |
-| GET    | `/api/jobs`                         | Tüm işler                                                   |
-| GET    | `/api/jobs/{id}`                    | İş detay                                                    |
-| POST   | `/api/jobs`                         | Yeni iş aç                                                  |
-| PUT    | `/api/jobs/{jobId}/update/{userId}` | **Yetkili güncelleme** (Worker kendi işini / Admin her işi) |
-| POST   | `/api/jobs/{jobId}/assign/{userId}` | İş atama                                                    |
-| GET    | `/api/jobs/{jobId}/revisions`       | İş geçmişi                                                  |
+| Method | Endpoint                            | Açıklama                              |
+| ------ | ----------------------------------- | ------------------------------------- |
+| GET    | `/api/jobs`                         | Tüm işleri listele                    |
+| POST   | `/api/jobs`                         | Yeni iş oluştur                       |
+| GET    | `/api/jobs/{id}`                    | İşi getir                             |
+| PUT    | `/api/jobs/{id}`                    | İşi güncelle                          |
+| DELETE | `/api/jobs/{id}`                    | İşi sil                               |
+| POST   | `/api/jobs/{jobId}/assign/{userId}` | İşi kullanıcıya ata                   |
+| PUT    | `/api/jobs/{jobId}/update/{userId}` | Kullanıcının kendi işini güncellemesi |
+| GET    | `/api/jobs/{jobId}/revisions`       | İş revizyon geçmişi                   |
+
 
 
 📝 REVISIONS
@@ -118,9 +145,8 @@ http://localhost:5210/swagger
 | POST   | `/api/revisions` | Manuel revizyon ekle |
 
 
-🔐 Yakında: Login & Security
 
-Planlanan geliştirmeler:
+Son geliştirmeler:
 
 * Kullanıcı girişi
 
@@ -129,6 +155,10 @@ Planlanan geliştirmeler:
 * Role-based authorization
 
 * Masaüstü (WPF / Blazor Hybrid) arayüz
+
+
+
+🔐 Planlanan Geliştirmeler
 
 * DXF / CSV dosya yönetimi
 
