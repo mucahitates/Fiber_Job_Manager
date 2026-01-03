@@ -16,5 +16,13 @@ namespace FiberJobManager.Desktop.Models
 
         [JsonPropertyName("role")]
         public string Role { get; set; }
+
+        [JsonPropertyName("email")]
+        public string Email { get; set; }
+
+        [JsonPropertyName("surname")]
+        public string Surname { get; set; }
+
+
     }
 }

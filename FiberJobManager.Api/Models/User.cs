@@ -7,6 +7,7 @@
         public string Email { get; set; } = "";
         public string Role { get; set; } = "Worker";   // Admin / Worker
         public string Password { get; set; }
+        public string UserSurname { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

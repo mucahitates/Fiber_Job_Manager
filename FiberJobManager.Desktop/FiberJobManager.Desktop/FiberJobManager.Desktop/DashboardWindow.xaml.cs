@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace FiberJobManager.Desktop
 {
     /// <summary>
@@ -22,6 +23,29 @@ namespace FiberJobManager.Desktop
         public DashboardWindow()
         {
             InitializeComponent();
+
+            lblUserName.Text = $"{Settings.UserName} {Settings.UserSurname}";
+            lblEmail.Text = Settings.Email;
+
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Settings.Role?.ToLower() != "boss")
+            {
+                MessageBox.Show(
+                    "Bu alana yalnızca yöneticiler erişebilir.",
+                    "Yetkisiz Erişim",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
+            // admin ise aç
+           // var win = new AdminPanelWindow();
+           // win.Show();
         }
     }
 }

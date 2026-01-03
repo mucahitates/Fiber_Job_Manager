@@ -30,7 +30,9 @@ namespace FiberJobManager.Api.Controllers
                 Message = "Giriş başarılı",
                 UserId = user.Id,
                 userName=user.Name,
-                Role = user.Role                               
+                Role = user.Role,
+                Email=user.Email,
+                Surname = user.UserSurname
             });
         }
 

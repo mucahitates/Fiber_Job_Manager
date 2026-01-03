@@ -11,7 +11,9 @@ namespace FiberJobManager.Desktop
         public static string JwtToken { get; set; }
         public static int UserId { get; set; }
         public static string UserName { get; set; }
+        public static string UserSurname{ get; set; }
         public static string Role { get; set; }
+        public static string Email { get; set; }
     }
 }
 

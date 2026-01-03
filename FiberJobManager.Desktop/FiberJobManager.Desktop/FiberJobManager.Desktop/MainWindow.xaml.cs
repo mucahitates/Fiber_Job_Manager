@@ -110,18 +110,21 @@ namespace FiberJobManager.Desktop
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(payload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("http://localhost:5210");
 
                 var response = await client.PostAsync("/api/Auth/login", content);
                 var respJson = await response.Content.ReadAsStringAsync();
 
+                
+
                 if (!response.IsSuccessStatusCode)
                 {
                     lblInfo.Text = "Email veya şifre hatalı.";
                     return;
                 }
-
+                MessageBox.Show(respJson);
                 var data = System.Text.Json.JsonSerializer.Deserialize<LoginResponse>(respJson);
 
                 // bilgiler kaydediliyor
@@ -129,6 +132,8 @@ namespace FiberJobManager.Desktop
                 Settings.UserId = data.UserId;
                 Settings.UserName = data.UserName;
                 Settings.Role = data.Role;
+                Settings.Email = data.Email;
+                Settings.UserSurname = data.Surname;
                 // Settings.Save();
 
                 if (data == null)
