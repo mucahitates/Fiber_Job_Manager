@@ -247,7 +247,8 @@
                                    TextWrapping="Wrap"/>
                     </Button>
 
-                    <Button Style="{StaticResource DashboardButton}">
+                    <Button Style="{StaticResource DashboardButton}" 
+                            Click="Button_Click_1">
                         <TextBlock Text="Linkler"
                                    FontSize="18"
                                    FontWeight="Bold"

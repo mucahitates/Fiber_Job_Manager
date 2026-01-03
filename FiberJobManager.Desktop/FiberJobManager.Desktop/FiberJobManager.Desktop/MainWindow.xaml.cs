@@ -124,7 +124,10 @@ namespace FiberJobManager.Desktop
                     lblInfo.Text = "Email veya şifre hatalı.";
                     return;
                 }
-                MessageBox.Show(respJson);
+                
+                //Apı dönüt kontrolü için yazıldı deafktif
+                //MessageBox.Show(respJson);
+                
                 var data = System.Text.Json.JsonSerializer.Deserialize<LoginResponse>(respJson);
 
                 // bilgiler kaydediliyor

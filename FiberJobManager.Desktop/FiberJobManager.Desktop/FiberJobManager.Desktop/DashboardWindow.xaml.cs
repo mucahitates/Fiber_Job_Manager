@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using FiberJobManager.Desktop.Views;
+
 
 
 namespace FiberJobManager.Desktop
@@ -46,6 +48,12 @@ namespace FiberJobManager.Desktop
             // admin ise aç
            // var win = new AdminPanelWindow();
            // win.Show();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var win = new LinksWindow();
+            win.Show();
         }
     }
 }

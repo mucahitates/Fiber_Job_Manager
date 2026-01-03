@@ -20,6 +20,10 @@ namespace FiberJobManager.Api.Data
         
         public DbSet<Revision> Revisions { get; set; }
 
+        public DbSet<Link> Links { get; set; }
+
+        public DbSet<Person> People { get; set; }
+
 
     }
 }
