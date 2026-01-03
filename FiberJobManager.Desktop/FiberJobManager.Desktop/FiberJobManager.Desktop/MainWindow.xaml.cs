@@ -131,6 +131,13 @@ namespace FiberJobManager.Desktop
                 Settings.Role = data.Role;
                 // Settings.Save();
 
+                if (data == null)
+                {
+                    lblInfo.Text = "Sunucudan beklenmeyen bir cevap alındı.";
+                    return;
+                }
+
+
                 // BENİ HATIRLA buraya eklenmesinin nedeni sadece data deserialize edilirise hatırlaması için
                 if (chkRemember.IsChecked == true)
                 {
