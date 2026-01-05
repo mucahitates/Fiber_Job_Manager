@@ -239,7 +239,7 @@
                                    TextWrapping="Wrap"/>
                     </Button>
 
-                    <Button Style="{StaticResource DashboardButton}">
+                    <Button Style="{StaticResource DashboardButton}" Click="Button_Click_2">
                         <TextBlock Text="Hazırlama Evrakları (Temp)"
                                    FontSize="18"
                                    FontWeight="Bold"

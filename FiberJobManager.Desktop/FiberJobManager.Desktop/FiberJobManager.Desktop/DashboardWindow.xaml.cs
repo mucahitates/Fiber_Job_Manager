@@ -55,5 +55,12 @@ namespace FiberJobManager.Desktop
             var win = new LinksWindow();
             win.Show();
         }
+
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            var win =new TempDocumentsWindow();
+            await win.LoadDocumentsAsync();
+            win.Show();
+        }
     }
 }

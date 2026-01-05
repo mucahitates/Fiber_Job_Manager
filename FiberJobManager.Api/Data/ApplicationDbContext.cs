@@ -24,6 +24,8 @@ namespace FiberJobManager.Api.Data
 
         public DbSet<Person> People { get; set; }
 
+        public DbSet<TempDocument> TempDocuments { get; set; }
+
 
     }
 }

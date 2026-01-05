@@ -93,9 +93,13 @@
     </ApplicationDefinition>
     <Compile Include="Models\LinkModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
+    <Compile Include="Models\TempDocument.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Views\LinksWindow.xaml.cs">
       <DependentUpon>LinksWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TempDocumentsWindow.xaml.cs">
+      <DependentUpon>TempDocumentsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="DashboardWindow.xaml">
       <SubType>Designer</SubType>
@@ -118,6 +122,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\LinksWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TempDocumentsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
