@@ -4,81 +4,97 @@
         Title="Hazırlama Evrakları (Temp)"
         Height="520" Width="900"
         WindowStartupLocation="CenterScreen"
-        Background="#0F172A">
+        Background="#EEF2FF">
 
     <Grid Margin="14">
 
-        <!-- Card -->
-        <Border Background="#111827"
+        <!-- OUTER CARD -->
+        <Border Background="#F8FAFF"
                 CornerRadius="18"
                 Padding="18"
-                BorderBrush="#1F2937"
-                BorderThickness="1">
+                BorderBrush="#CBD5E1"
+                BorderThickness="2">
 
             <Grid>
-
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <!-- HEADER -->
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center">
-
-                    <StackPanel>
-                        <TextBlock Text="Hazırlama Evrakları"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   Foreground="#F3F4F6" />
-                        <TextBlock Text="DWT — DWG — LSP dosyaları"
-                                   FontSize="12"
-                                   Foreground="#9CA3AF"/>
-                    </StackPanel>
-
+                <StackPanel>
+                    <TextBlock Text="Hazırlama Evrakları"
+                               FontSize="20"
+                               FontWeight="Bold"                              
+                               Foreground="#111827" />
+                    <TextBlock Text="(DWT — DWG — LSP) Firmalara ait dosyalar"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,5,0,0"
+                               Foreground="#475569"/>
                 </StackPanel>
 
-                <!-- TABLE -->
+                <!-- INNER CARD -->
                 <Border Grid.Row="1"
-                        Background="#020617"
+                        Background="#F1F5FF"
                         CornerRadius="14"
                         Padding="10"
-                        Margin="0,14,0,0">
+                        Margin="0,14,0,0"
+                        BorderBrush="#CBD5E1"
+                        BorderThickness="2">
 
                     <DataGrid x:Name="dgTempDocs"
-                              RowHeaderWidth="1"
+                              CanUserResizeColumns="False"
+                              CanUserReorderColumns="False"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               IsReadOnly="True"
-                              HeadersVisibility="All"
+                              HeadersVisibility="Column"
                               GridLinesVisibility="All"
+                              RowHeaderWidth="0"
                               RowHeight="42"
                               Background="Transparent"
-                              Foreground="#E5E7EB"
+                              RowBackground="#F8FAFF"
+                              AlternatingRowBackground="#F1F5FF"
+                              Foreground="#111827"
                               BorderThickness="0"
-                              HorizontalGridLinesBrush="#374151"
-                              VerticalGridLinesBrush="#374151"
-                              RowBackground="#020617"
-                              AlternatingRowBackground="#020617"
-                              PreviewMouseLeftButtonDown="dgTempDocs_PreviewMouseLeftButtonDown" Margin="-4,0,0,0">
+                              HorizontalGridLinesBrush="#cbd5e1"
+                              VerticalGridLinesBrush="#cbd5e1"
+                              PreviewMouseLeftButtonDown="dgTempDocs_PreviewMouseLeftButtonDown" SelectionChanged="dgTempDocs_SelectionChanged_1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 
-                        <!-- HEADER STYLE -->
+                        <!-- STYLES -->
                         <DataGrid.Resources>
 
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="#020617"/>
-                                <Setter Property="Foreground" Value="#9CA3AF"/>
+                            <Style TargetType="TextBlock" x:Key="CenterText">
+                                <Setter Property="TextAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="16"/>
                                 <Setter Property="FontWeight" Value="SemiBold"/>
-                                <Setter Property="Padding" Value="10"/>
-                                <!-- Sağ ve altta çizgi -->
-                                <Setter Property="BorderThickness" Value="2,2,2,2"/>
-                                <Setter Property="BorderBrush" Value="#374151"/>
+                            </Style>
+                            
+                            <!-- HEADER -->
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="Background" Value="#E0E7FF"/>
+                                <Setter Property="Foreground" Value="#1F2937"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="FontSize" Value="16"/>
+                                <Setter Property="Padding" Value="12,10"/>
+                                <Setter Property="BorderThickness" Value="1,1,1,1"/>
+                                <Setter Property="BorderBrush" Value="#cbd5e1"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#E0E7FF"/>
+                                    </Trigger>
+                                </Style.Triggers>
                             </Style>
 
-
-                            <!-- Primary Button -->
+                            <!-- PRIMARY BUTTON -->
                             <Style TargetType="Button" x:Key="PrimaryBtn">
-                                <Setter Property="Background" Value="#2563EB"/>
+                                <Setter Property="Background" Value="#4F46E5 "/>
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="Padding" Value="10,4"/>
                                 <Setter Property="Cursor" Value="Hand"/>
@@ -97,34 +113,37 @@
                                 </Setter>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#3B82F6"/>
+                                        <Setter Property="Background" Value="#6366F1"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
 
                         </DataGrid.Resources>
 
+                        <!-- COLUMNS -->
                         <DataGrid.Columns>
 
                             <DataGridTextColumn Header="Dosya Adı"
                                                 Binding="{Binding FileName}"
-                                                Width="*"/>
+                                                Width="*"
+                                                ElementStyle="{StaticResource CenterText}"/>
 
                             <DataGridTextColumn Header="Firma"
                                                 Binding="{Binding Firma}"
-                                                Width="220"/>
+                                                Width="220"
+                                                ElementStyle="{StaticResource CenterText}"/>
 
                             <DataGridTextColumn Header="Proje Türü"
                                                 Binding="{Binding ProjeTuru}"
-                                                Width="220"/>
+                                                Width="220"
+                                                ElementStyle="{StaticResource CenterText}"/>
 
                             <DataGridTemplateColumn Header="İndir" Width="120">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="İndir"
                                                 Style="{StaticResource PrimaryBtn}"
-                                                Tag="{Binding}"
-                                                />
+                                                Tag="{Binding}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

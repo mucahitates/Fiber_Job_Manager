@@ -82,5 +82,10 @@ namespace FiberJobManager.Desktop.Views
         {
 
         }
+
+        private void dgTempDocs_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
