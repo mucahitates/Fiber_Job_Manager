@@ -94,7 +94,7 @@ FiberJobManager
 ![Login](./screenshots/login.png)
 
 ### Dashboard
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](./Fiber_Job_Manager/screenshots/dashboard.png)
 
 ### Hazırlama Evrakları (Temp)
 ![Temp Documents](./screenshots/temp-documents.png)
