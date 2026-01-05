@@ -88,6 +88,20 @@ FiberJobManager
 │
 ├──README.md
 
+## Uygulama Görüntüleri
+
+### Login Ekranı
+![Login](./screenshots/login.png)
+
+### Dashboard
+![Dashboard](./screenshots/dashboard.png)
+
+### Hazırlama Evrakları (Temp)
+![Temp Documents](./screenshots/temp-documents.png)
+
+### Link
+![Link](./screenshots/links.png)
+
 
 ```
 ⚙️ Kurulum
