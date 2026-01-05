@@ -25,8 +25,9 @@
                 <StackPanel>
                     <TextBlock Text="Hazırlama Evrakları"
                                FontSize="20"
-                               FontWeight="Bold"                              
+                               FontWeight="Bold"
                                Foreground="#111827" />
+
                     <TextBlock Text="(DWT — DWG — LSP) Firmalara ait dosyalar"
                                FontSize="14"
                                FontWeight="SemiBold"
@@ -44,36 +45,43 @@
                         BorderThickness="2">
 
                     <DataGrid x:Name="dgTempDocs"
-                              CanUserResizeColumns="False"
-                              CanUserReorderColumns="False"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               IsReadOnly="True"
+
+                              CanUserReorderColumns="False"
+                              CanUserResizeColumns="False"
+
                               HeadersVisibility="Column"
                               GridLinesVisibility="All"
                               RowHeaderWidth="0"
                               RowHeight="42"
+
                               Background="Transparent"
                               RowBackground="#F8FAFF"
                               AlternatingRowBackground="#F1F5FF"
                               Foreground="#111827"
                               BorderThickness="0"
-                              HorizontalGridLinesBrush="#cbd5e1"
-                              VerticalGridLinesBrush="#cbd5e1"
-                              PreviewMouseLeftButtonDown="dgTempDocs_PreviewMouseLeftButtonDown" SelectionChanged="dgTempDocs_SelectionChanged_1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                              HorizontalGridLinesBrush="#CBD5E1"
+                              VerticalGridLinesBrush="#CBD5E1"
+
+                              
+
+                              PreviewMouseLeftButtonDown="dgTempDocs_PreviewMouseLeftButtonDown">
 
                         <!-- STYLES -->
                         <DataGrid.Resources>
 
+                            <!-- 📌 TEXT ORTALAMA -->
                             <Style TargetType="TextBlock" x:Key="CenterText">
                                 <Setter Property="TextAlignment" Value="Center"/>
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontSize" Value="16"/>
+                                <Setter Property="FontSize" Value="15"/>
                                 <Setter Property="FontWeight" Value="SemiBold"/>
                             </Style>
-                            
-                            <!-- HEADER -->
+
+                            <!-- 📌 BAŞLIK -->
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                                 <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -82,24 +90,54 @@
                                 <Setter Property="FontWeight" Value="Bold"/>
                                 <Setter Property="FontSize" Value="16"/>
                                 <Setter Property="Padding" Value="12,10"/>
-                                <Setter Property="BorderThickness" Value="1,1,1,1"/>
-                                <Setter Property="BorderBrush" Value="#cbd5e1"/>
-                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="BorderBrush" Value="#CBD5E1"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#E0E7FF"/>
+                                        <Setter Property="Background" Value="#E7EDFF"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
 
-                            <!-- PRIMARY BUTTON -->
+                            <!-- 📌 SATIR — SEÇİLMESİN -->
+                            <Style x:Key="NoSelectionRowStyle" TargetType="DataGridRow">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#111827"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="#111827"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+
+                            <!-- 📌 HÜCRE — SEÇİLMESİN + HOVER -->
+                            <Style x:Key="NoSelectionCellStyle" TargetType="DataGridCell">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#111827"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#E8EEFF"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="#111827"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+
+                            <!-- 📌 BUTON -->
                             <Style TargetType="Button" x:Key="PrimaryBtn">
-                                <Setter Property="Background" Value="#4F46E5 "/>
+                                <Setter Property="Background" Value="#4F46E5"/>
                                 <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="Padding" Value="10,4"/>
+                                <Setter Property="Padding" Value="8,3"/>
                                 <Setter Property="Cursor" Value="Hand"/>
                                 <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Width" Value="80"/>
+                                <Setter Property="Height" Value="28"/>
                                 <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Focusable" Value="False"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Button">
@@ -126,24 +164,24 @@
                             <DataGridTextColumn Header="Dosya Adı"
                                                 Binding="{Binding FileName}"
                                                 Width="*"
-                                                ElementStyle="{StaticResource CenterText}"/>
+                                                ElementStyle="{StaticResource CenterText}" />
 
                             <DataGridTextColumn Header="Firma"
                                                 Binding="{Binding Firma}"
                                                 Width="220"
-                                                ElementStyle="{StaticResource CenterText}"/>
+                                                ElementStyle="{StaticResource CenterText}" />
 
                             <DataGridTextColumn Header="Proje Türü"
                                                 Binding="{Binding ProjeTuru}"
                                                 Width="220"
-                                                ElementStyle="{StaticResource CenterText}"/>
+                                                ElementStyle="{StaticResource CenterText}" />
 
                             <DataGridTemplateColumn Header="İndir" Width="120">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="İndir"
                                                 Style="{StaticResource PrimaryBtn}"
-                                                Tag="{Binding}"/>
+                                                Click="BtnDownload_Click"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

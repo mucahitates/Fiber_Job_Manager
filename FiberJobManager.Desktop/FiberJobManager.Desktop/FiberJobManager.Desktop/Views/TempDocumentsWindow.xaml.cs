@@ -17,6 +17,7 @@ using FiberJobManager.Desktop.Models;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Diagnostics;
 
 
 namespace FiberJobManager.Desktop.Views
@@ -75,6 +76,30 @@ namespace FiberJobManager.Desktop.Views
                 child = VisualTreeHelper.GetParent(child);
             }
             return null;
+        }
+        private void BtnDownload_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+
+            if (button?.DataContext is TempDocument doc && !string.IsNullOrWhiteSpace(doc.DriveUrl))
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = doc.DriveUrl,
+                        UseShellExecute = true   // 🔥 tarayıcıda açar
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Dosya açılırken hata oluştu:\n" + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Bu kayda ait indirilebilir bağlantı bulunamadı.");
+            }
         }
 
 
