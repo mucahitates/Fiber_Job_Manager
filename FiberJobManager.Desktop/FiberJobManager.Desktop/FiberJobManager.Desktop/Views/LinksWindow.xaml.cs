@@ -1,24 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using FiberJobManager.Desktop.Models;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
-
-
 
 namespace FiberJobManager.Desktop.Views
 {
@@ -34,6 +22,15 @@ namespace FiberJobManager.Desktop.Views
             {
                 BaseAddress = new Uri("http://localhost:5210")
             };
+
+            // 🔐 Login sonrası kaydedilen JWT burada header’a giriliyor
+            var token = FiberJobManager.Desktop.Properties.Settings.Default.Token;
+
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                _http.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+            }
 
             LoadData();
         }
@@ -53,21 +50,19 @@ namespace FiberJobManager.Desktop.Views
                 MessageBox.Show("Veri yüklenirken hata oluştu:\n" + ex.Message);
             }
         }
+
         private void lstLinks_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lstLinks.SelectedItem is LinkModel selected)
             {
-                var psi = new ProcessStartInfo
+                Process.Start(new ProcessStartInfo
                 {
                     FileName = selected.Url,
                     UseShellExecute = true
-                };
+                });
 
-                Process.Start(psi);
-
-                lstLinks.SelectedIndex = -1; // tekrar tıklanabilsin
+                lstLinks.SelectedIndex = -1;
             }
         }
-
     }
 }

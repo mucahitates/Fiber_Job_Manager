@@ -1,48 +1,32 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using FiberJobManager.Desktop.Models;
-using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace FiberJobManager.Desktop.Views
 {
     public partial class NewJobsWindow : Window
     {
         public ObservableCollection<JobRowModel> Jobs { get; set; }
-
         private JobRowModel _selectedJob;
-
-        // Login ekranında kaydedilen JWT token
-        private string _token;
 
         public NewJobsWindow()
         {
             InitializeComponent();
-
-            // Settings’ten token’ı alıyoruz
-            _token = Properties.Settings.Default.Token;
-
             LoadJobsFromApi();
         }
 
-        // 🔹 Kullanıcıya atanmış New projeleri API’den al
+        // 🔹 Kullanıcıya atanmış new projeleri API’den çeker
         private async void LoadJobsFromApi()
         {
             try
             {
-                var client = new HttpClient();
-
-                // 🔐 JWT token’ı Authorization header’a koyuyoruz
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", _token);
-
-                var response = await client.GetAsync("https://localhost:5210/api/jobs/my-new");
+                var response = await App.ApiClient.GetAsync("/api/jobs/my-new");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -61,7 +45,7 @@ namespace FiberJobManager.Desktop.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Sunucuya bağlanılamadı: " + ex.Message);
+                MessageBox.Show("Sunucuya bağlanılamadı:\n" + ex.Message);
             }
         }
 
@@ -116,15 +100,9 @@ namespace FiberJobManager.Desktop.Views
 
             try
             {
-                var client = new HttpClient();
+                var url = $"/api/jobs/{_selectedJob.Id}/field-report";
 
-                // 🔐 JWT token yine header’da
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", _token);
-
-                var url = $"https://localhost:5210/api/jobs/{_selectedJob.Id}/field-report";
-
-                var response = await client.PostAsync(url, content);
+                var response = await App.ApiClient.PostAsync(url, content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -139,7 +117,7 @@ namespace FiberJobManager.Desktop.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Sunucuya bağlanılamadı: " + ex.Message);
+                MessageBox.Show("Sunucuya bağlanılamadı:\n" + ex.Message);
             }
         }
     }

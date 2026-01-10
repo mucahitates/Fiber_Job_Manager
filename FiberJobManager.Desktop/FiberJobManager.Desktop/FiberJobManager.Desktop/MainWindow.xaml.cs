@@ -71,6 +71,7 @@ namespace FiberJobManager.Desktop
 
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
+
             lblInfo.Text = "Giriş yapılıyor...";
 
             var email = txtEmail.Text?.Trim();
@@ -136,7 +137,12 @@ namespace FiberJobManager.Desktop
 
 
                 // bilgiler kaydediliyor
-                // JWT Token'ı uygulama içine kaydediyoruz
+                // JWT Token'ı uygulama içine kaydediyoruz                
+                // 🔑 Uygulamanın HttpClient’ına token ver
+                
+                App.ApiClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", data.Token);
+
                 Properties.Settings.Default.Token = data.Token;
                 Settings.UserId = data.UserId;
                 Settings.UserName = data.UserName;
