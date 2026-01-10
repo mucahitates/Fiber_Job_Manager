@@ -1,0 +1,154 @@
+﻿<Window x:Class="FiberJobManager.Desktop.Views.NewJobsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Yeni Projeler"
+        Height="700"
+        Width="1200"
+        Background="#F4F6F9"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <Grid Grid.Row="0" Margin="0 0 0 20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Yeni Projeler"
+                           FontSize="28"
+                           FontWeight="SemiBold"
+                           Foreground="#1F2937"/>
+
+                <TextBlock Text="Size atanmış ve henüz işleme alınmamış projeler"
+                           FontSize="14"
+                           Foreground="#6B7280"
+                           Margin="0 4 0 0"/>
+            </StackPanel>
+
+            <Border Grid.Column="1"
+                    Background="White"
+                    CornerRadius="12"
+                    Padding="16"
+                    BorderBrush="#E5E7EB"
+                    BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Toplam:"
+                               Foreground="#6B7280"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text=" 12"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Foreground="#2563EB"
+                               Margin="6 0 0 0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- MAIN CARD -->
+        <Border Grid.Row="1"
+                Background="White"
+                CornerRadius="16"
+                Padding="20"
+                BorderBrush="#E5E7EB"
+                BorderThickness="1">
+
+            <Grid>
+                <DataGrid x:Name="NewJobsGrid"
+                          AutoGenerateColumns="False"
+                          HeadersVisibility="Column"
+                          RowHeight="48"
+                          GridLinesVisibility="None"
+                          Background="White"
+                          BorderThickness="0"
+                          SelectionMode="Single">
+
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Margin" Value="0 6"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridRow">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="10"
+                                                Padding="8">
+                                            <SelectiveScrollingGrid>
+                                                <SelectiveScrollingGrid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </SelectiveScrollingGrid.ColumnDefinitions>
+
+                                                <SelectiveScrollingGrid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                </SelectiveScrollingGrid.RowDefinitions>
+
+                                                <DataGridCellsPresenter Grid.Column="1"/>
+                                            </SelectiveScrollingGrid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#EFF6FF"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Proje Kodu"
+                                            Binding="{Binding JobCode}"
+                                            Width="150"/>
+
+                        <DataGridTextColumn Header="Başlık"
+                                            Binding="{Binding Title}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Müşteri"
+                                            Binding="{Binding Customer}"
+                                            Width="200"/>
+
+                        <DataGridTextColumn Header="Oluşturulma"
+                                            Binding="{Binding CreatedAt}"
+                                            Width="160"/>
+
+                        <DataGridTemplateColumn Header="İşlem" Width="160">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Aç"
+                                            Height="34"
+                                            Background="#2563EB"
+                                            Foreground="White"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            FontWeight="SemiBold"
+                                            Padding="12 4"
+                                            HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+        </Border>
+
+    </Grid>
+</Window>
