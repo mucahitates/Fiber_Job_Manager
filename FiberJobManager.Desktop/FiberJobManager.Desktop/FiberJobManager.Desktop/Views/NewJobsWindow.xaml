@@ -2,19 +2,19 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Yeni Projeler"
-        Height="700"
-        Width="1200"
-        Background="#F4F6F9"
-        WindowStartupLocation="CenterScreen">
+        Height="720"
+        Width="1280"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F6F9">
 
-    <Grid Margin="25">
+    <Grid Margin="22">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- HEADER -->
-        <Grid Grid.Row="0" Margin="0 0 0 20">
+        <Grid Grid.Row="0" Margin="0 0 0 16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
@@ -25,130 +25,100 @@
                            FontSize="28"
                            FontWeight="SemiBold"
                            Foreground="#1F2937"/>
-
                 <TextBlock Text="Size atanmış ve henüz işleme alınmamış projeler"
-                           FontSize="14"
+                           FontSize="13"
                            Foreground="#6B7280"
                            Margin="0 4 0 0"/>
             </StackPanel>
-
+    
             <Border Grid.Column="1"
+                    Margin="0 0 10 0 "
                     Background="White"
                     CornerRadius="12"
-                    Padding="16"
-                    BorderBrush="#E5E7EB"
+                    Padding="14"
+                    BorderBrush="Black"
                     BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Toplam:"
-                               Foreground="#6B7280"
-                               VerticalAlignment="Center"/>
-                    <TextBlock Text=" 12"
+                    <TextBlock Text="Toplam Yeni:"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Foreground="Black"/>
+                    
+                    <TextBlock x:Name="TxtTotalNew"
+                               Text="20"
                                FontWeight="Bold"
                                FontSize="20"
+                               VerticalAlignment="Center"
                                Foreground="#2563EB"
-                               Margin="6 0 0 0"/>
+                               Margin="8 0 0 0"/>
                 </StackPanel>
             </Border>
         </Grid>
 
-        <!-- MAIN CARD -->
+        <!-- DATA GRID -->
         <Border Grid.Row="1"
                 Background="White"
                 CornerRadius="16"
-                Padding="20"
+                Padding="16"
                 BorderBrush="#E5E7EB"
                 BorderThickness="1">
 
-            <Grid>
-                <DataGrid x:Name="NewJobsGrid"
-                          AutoGenerateColumns="False"
-                          HeadersVisibility="Column"
-                          RowHeight="48"
-                          GridLinesVisibility="None"
-                          Background="White"
-                          BorderThickness="0"
-                          SelectionMode="Single">
+            <DataGrid x:Name="NewJobsGrid"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserResizeColumns="False"
+                      CanUserReorderColumns="False"
+                      CanUserResizeRows="False"
+                      CanUserSortColumns="False"
+                      AutoGenerateColumns="False"                     
+                      IsReadOnly="False"
+                      GridLinesVisibility="None"
+                      RowHeight="44"
+                      Background="White">
 
-                    <DataGrid.Resources>
-                        <Style TargetType="DataGridRow">
-                            <Setter Property="Background" Value="White"/>
-                            <Setter Property="Margin" Value="0 6"/>
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Setter Property="BorderBrush" Value="#E5E7EB"/>
-                            <Setter Property="BorderThickness" Value="1"/>
-                            <Setter Property="SnapsToDevicePixels" Value="True"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="DataGridRow">
-                                        <Border Background="{TemplateBinding Background}"
-                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                BorderThickness="{TemplateBinding BorderThickness}"
-                                                CornerRadius="10"
-                                                Padding="8">
-                                            <SelectiveScrollingGrid>
-                                                <SelectiveScrollingGrid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </SelectiveScrollingGrid.ColumnDefinitions>
+                <DataGrid.Columns>
 
-                                                <SelectiveScrollingGrid.RowDefinitions>
-                                                    <RowDefinition Height="*"/>
-                                                </SelectiveScrollingGrid.RowDefinitions>
+                    <DataGridTextColumn Header="Proje Id" Binding="{Binding Id}" Width="80"/>
+                    <DataGridTextColumn Header="Firma" Binding="{Binding Firma}" Width="200"/>
+                    <DataGridTextColumn Header="Bölge(Montage Ort)" Binding="{Binding Bolge}" Width="140"/>
+                    <DataGridTextColumn Header="HK" Binding="{Binding HK}" Width="100"/>
+                    <DataGridTextColumn Header="SM" Binding="{Binding SM}" Width="100"/>
+                    <DataGridTextColumn Header="NVT" Binding="{Binding HKNVT}" Width="120"/>
+                    <DataGridTextColumn Header="İlk Ölçüm (Erstmessung)" Binding="{Binding Erstmessung}" Width="150"/>
+                    
+                    
+                    <!-- SAHA DURUMU -->
+                    <DataGridTemplateColumn Header="Proje Durumu" Width="180">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox SelectedValue="{Binding FieldStatus, Mode=TwoWay}"
+                                          SelectedValuePath="Tag"
+                                          Height="30">
+                                    <ComboBoxItem Content="İşlem yapılmadı" Tag="0"/>
+                                    <ComboBoxItem Content="İşlem yapılamıyor" Tag="1"/>
+                                    <ComboBoxItem Content="İşlem tamamlandı" Tag="2"/>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                                                <DataGridCellsPresenter Grid.Column="1"/>
-                                            </SelectiveScrollingGrid>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
+                    <!-- DETAY -->
+                    <DataGridTemplateColumn Header="Detay" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="📝"
+                                        Width="40"
+                                        Height="30"
+                                        Cursor="Hand"
+                                        Tag="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#EFF6FF"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.Resources>
-
-                    <DataGrid.Columns>
-
-                        <DataGridTextColumn Header="Proje Kodu"
-                                            Binding="{Binding JobCode}"
-                                            Width="150"/>
-
-                        <DataGridTextColumn Header="Başlık"
-                                            Binding="{Binding Title}"
-                                            Width="*"/>
-
-                        <DataGridTextColumn Header="Müşteri"
-                                            Binding="{Binding Customer}"
-                                            Width="200"/>
-
-                        <DataGridTextColumn Header="Oluşturulma"
-                                            Binding="{Binding CreatedAt}"
-                                            Width="160"/>
-
-                        <DataGridTemplateColumn Header="İşlem" Width="160">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="Aç"
-                                            Height="34"
-                                            Background="#2563EB"
-                                            Foreground="White"
-                                            BorderThickness="0"
-                                            Cursor="Hand"
-                                            FontWeight="SemiBold"
-                                            Padding="12 4"
-                                            HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
+                </DataGrid.Columns>
+            </DataGrid>
 
         </Border>
-
     </Grid>
 </Window>

@@ -91,12 +91,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\JobRowModel.cs" />
     <Compile Include="Models\LinkModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
     <Compile Include="Models\TempDocument.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Views\LinksWindow.xaml.cs">
       <DependentUpon>LinksWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewJobsWindow.xaml.cs">
+      <DependentUpon>NewJobsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TempDocumentsWindow.xaml.cs">
       <DependentUpon>TempDocumentsWindow.xaml</DependentUpon>
@@ -122,6 +126,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\LinksWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewJobsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

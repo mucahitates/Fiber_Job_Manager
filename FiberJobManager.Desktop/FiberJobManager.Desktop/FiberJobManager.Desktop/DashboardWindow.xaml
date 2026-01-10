@@ -215,7 +215,7 @@
                              Columns="3"
                              Margin="10">
 
-                    <Button Style="{StaticResource DashboardButton}">
+                    <Button Style="{StaticResource DashboardButton}" Click="Button_Click_4">
                         <TextBlock Text="Tüm Projeler"
                            FontSize="18"
                            FontWeight="Bold"
@@ -223,7 +223,7 @@
                            TextWrapping="Wrap"/>
                     </Button>
 
-                    <Button Style="{StaticResource DashboardButton}">
+                    <Button Style="{StaticResource DashboardButton}" Click="Button_Click_3">
                         <TextBlock Text="Yeni Projeler"
                                    FontSize="18"
                                    FontWeight="Bold"
