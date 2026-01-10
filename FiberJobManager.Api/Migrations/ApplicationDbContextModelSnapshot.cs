@@ -35,6 +35,29 @@ namespace FiberJobManager.Api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Firma")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("FirstMeasurement")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("HK")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NVT")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SM")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -46,6 +69,37 @@ namespace FiberJobManager.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Jobs");
+                });
+
+            modelBuilder.Entity("FiberJobManager.Api.Models.JobFieldReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("FieldStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("JobFieldReports");
                 });
 
             modelBuilder.Entity("FiberJobManager.Api.Models.Link", b =>
@@ -176,6 +230,25 @@ namespace FiberJobManager.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("FiberJobManager.Api.Models.JobFieldReport", b =>
+                {
+                    b.HasOne("FiberJobManager.Api.Models.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FiberJobManager.Api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

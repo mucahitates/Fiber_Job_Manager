@@ -2,9 +2,12 @@
 using FiberJobManager.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace FiberJobManager.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class JobsController : ControllerBase
@@ -124,7 +127,7 @@ namespace FiberJobManager.Api.Controllers
         }
 
         // İstenen işe ait tüm revizeleri listeler
-        [HttpGet("{jobId}/revisions")]  
+        [HttpGet("{jobId}/revisions")]
         public async Task<IActionResult> GetJobRevisions(int jobId)
         {
             var job = await _context.Jobs.FindAsync(jobId);
@@ -138,6 +141,22 @@ namespace FiberJobManager.Api.Controllers
 
             return Ok(revisions);
         }
+
+
+        [HttpGet("my-new")]
+        public IActionResult GetMyNewJobs()
+        {
+            // Token içinden userId'yi alıyoruz
+            var userId = int.Parse(User.FindFirst("userId").Value);
+
+            // Sadece bu kullanıcıya atanmış ve NEW olan işleri çekiyoruz
+            var jobs = _context.Jobs
+             .Where(j => j.AssignedUserId == userId)
+             .ToList();
+
+            return Ok(jobs);
+        }
+
 
 
     }

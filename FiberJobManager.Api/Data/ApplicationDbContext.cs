@@ -4,8 +4,6 @@ using FiberJobManager.Api.Models;
 namespace FiberJobManager.Api.Data
 {
 
-    using FiberJobManager.Api.Models;
-
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -25,6 +23,9 @@ namespace FiberJobManager.Api.Data
         public DbSet<Person> People { get; set; }
 
         public DbSet<TempDocument> TempDocuments { get; set; }
+
+        public DbSet<JobFieldReport> JobFieldReports { get; set; }
+
 
 
     }

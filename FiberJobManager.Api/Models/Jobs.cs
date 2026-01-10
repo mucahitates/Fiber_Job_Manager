@@ -13,5 +13,16 @@
         public string Status { get; set; } = "Pending";
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        
+        public string Firma { get; set; }   // firma
+        public string Region { get; set; }       // Bölge
+
+        public string HK { get; set; }
+        public string SM { get; set; }
+        public string NVT { get; set; }          // HK/NVT veya NVT
+
+        public DateTime? FirstMeasurement { get; set; }  // İlk Ölçüm (Erstmessung)
+
     }
 }

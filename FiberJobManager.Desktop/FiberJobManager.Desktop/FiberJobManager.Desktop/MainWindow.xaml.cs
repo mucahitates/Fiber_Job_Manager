@@ -35,7 +35,7 @@ namespace FiberJobManager.Desktop
         public MainWindow()
         {
             InitializeComponent();
-            
+
             SetupPlaceholders();
 
             //Beni hatırla butonu için eklendi
@@ -95,7 +95,7 @@ namespace FiberJobManager.Desktop
                 lblInfo.Text = "Lütfen email ve şifrenizi girin.";
                 return;
             }
-            
+
 
             try
             {
@@ -117,27 +117,34 @@ namespace FiberJobManager.Desktop
                 var response = await client.PostAsync("/api/Auth/login", content);
                 var respJson = await response.Content.ReadAsStringAsync();
 
-                
+
 
                 if (!response.IsSuccessStatusCode)
                 {
                     lblInfo.Text = "Email veya şifre hatalı.";
                     return;
                 }
-                
+
                 //Apı dönüt kontrolü için yazıldı deafktif
                 //MessageBox.Show(respJson);
-                
-                var data = System.Text.Json.JsonSerializer.Deserialize<LoginResponse>(respJson);
+
+                var data = System.Text.Json.JsonSerializer.Deserialize<LoginResponse>(
+                     respJson,
+                     new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                     );
+
+
 
                 // bilgiler kaydediliyor
-                //Settings.JwtToken = data.Token;
+                // JWT Token'ı uygulama içine kaydediyoruz
+                Properties.Settings.Default.Token = data.Token;
                 Settings.UserId = data.UserId;
                 Settings.UserName = data.UserName;
                 Settings.Role = data.Role;
                 Settings.Email = data.Email;
                 Settings.UserSurname = data.Surname;
                 // Settings.Save();
+                Properties.Settings.Default.Save();
 
                 if (data == null)
                 {
