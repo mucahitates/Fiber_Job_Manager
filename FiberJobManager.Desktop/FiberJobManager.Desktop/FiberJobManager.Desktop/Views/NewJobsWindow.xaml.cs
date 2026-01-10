@@ -32,9 +32,9 @@ namespace FiberJobManager.Desktop.Views
         {
             Jobs = new ObservableCollection<JobRowModel>
             {
-                new JobRowModel{ Id=101, Firma="Berlin Mitte", Bolge="Berlin", HK="HK12", SM="SM5", HKNVT="NVT-1", Erstmessung="01.01.2026", FieldStatus=0 },
-                new JobRowModel{ Id=102, Firma="Hamburg Nord", Bolge="Hamburg", HK="HK7", SM="SM2", HKNVT="NVT-3", Erstmessung="02.01.2026", FieldStatus=1 },
-                new JobRowModel{ Id=103, Firma="Munich Süd", Bolge="Munich", HK="HK3", SM="SM9", HKNVT="NVT-7", Erstmessung="03.01.2026", FieldStatus=2 }
+                new JobRowModel{ Id=101, Firma="Berlin Mitte", Bolge="Berlin", HK="HK12", SM="SM5", NVT="NVT-1", Erstmessung="01.01.2026", FieldStatus=0 },
+                new JobRowModel{ Id=102, Firma="Hamburg Nord", Bolge="Hamburg", HK="HK7", SM="SM2", NVT="NVT-3", Erstmessung="02.01.2026", FieldStatus=1 },
+                new JobRowModel{ Id=103, Firma="Munich Süd", Bolge="Munich", HK="HK3", SM="SM9", NVT="NVT-7", Erstmessung="03.01.2026", FieldStatus=2 }
             };
         }
 
@@ -48,6 +48,19 @@ namespace FiberJobManager.Desktop.Views
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
             );
+        }
+
+        // Bu metodun ismi XAML'deki Click="BtnOpenNote_Click" ile birebir aynı olmalı
+        private void BtnOpenNote_Click(object sender, RoutedEventArgs e)
+        {
+            // Popup'ı görünür kılan komut budur
+            NotePopup.IsOpen = true;
+        }
+
+        // İptal butonu için
+        private void BtnCloseNote_Click(object sender, RoutedEventArgs e)
+        {
+            NotePopup.IsOpen = false;
         }
     }
 }

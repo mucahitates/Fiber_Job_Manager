@@ -2,8 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Yeni Projeler"
-        Height="720"
-        Width="1280"
+        Height="820" Width="1300"
         WindowStartupLocation="CenterScreen"
         Background="#F4F6F9">
 
@@ -13,7 +12,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- HEADER -->
         <Grid Grid.Row="0" Margin="0 0 0 16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -21,104 +19,207 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel>
-                <TextBlock Text="Yeni Projeler"
-                           FontSize="28"
-                           FontWeight="SemiBold"
-                           Foreground="#1F2937"/>
-                <TextBlock Text="Size atanmış ve henüz işleme alınmamış projeler"
-                           FontSize="13"
-                           Foreground="#6B7280"
-                           Margin="0 4 0 0"/>
+                <TextBlock Text="Yeni Projeler" FontSize="28" FontWeight="SemiBold" Foreground="#1F2937"/>
+                <TextBlock Text="Size atanmış ve henüz işleme alınmamış projeler" FontSize="13" Foreground="#6B7280" Margin="0 4 0 0"/>
             </StackPanel>
-    
-            <Border Grid.Column="1"
-                    Margin="0 0 10 0 "
-                    Background="White"
-                    CornerRadius="12"
-                    Padding="14"
-                    BorderBrush="Black"
-                    BorderThickness="1">
+
+            <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="14" BorderBrush="Black" BorderThickness="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Toplam Yeni:"
-                               FontSize="18"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Foreground="Black"/>
-                    
-                    <TextBlock x:Name="TxtTotalNew"
-                               Text="20"
-                               FontWeight="Bold"
-                               FontSize="20"
-                               VerticalAlignment="Center"
-                               Foreground="#2563EB"
-                               Margin="8 0 0 0"/>
+                    <TextBlock Text="Toplam Yeni:" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="TxtTotalNew" Text="3" FontWeight="Bold" FontSize="20" VerticalAlignment="Center" Foreground="#2563EB" Margin="8 0 0 0"/>
                 </StackPanel>
             </Border>
         </Grid>
 
-        <!-- DATA GRID -->
-        <Border Grid.Row="1"
-                Background="White"
-                CornerRadius="16"
-                Padding="16"
-                BorderBrush="#E5E7EB"
-                BorderThickness="1">
+        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="16" BorderBrush="Black" BorderThickness="1" Margin="10">
+            <Grid>
+                <DataGrid x:Name="NewJobsGrid"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          CanUserResizeColumns="False"
+          CanUserReorderColumns="False"
+          CanUserSortColumns="False" 
+          GridLinesVisibility="All"
+          HeadersVisibility="Column"
+          Background="White"
+          BorderBrush="#D1D5DB"
+          BorderThickness="1"
+          HorizontalGridLinesBrush="#E5E7EB"
+          VerticalGridLinesBrush="#E5E7EB"
+          RowHeight="45" 
+          AlternatingRowBackground="#F9FAFB"
+          ColumnWidth="*">
 
-            <DataGrid x:Name="NewJobsGrid"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      CanUserResizeColumns="False"
-                      CanUserReorderColumns="False"
-                      CanUserResizeRows="False"
-                      CanUserSortColumns="False"
-                      AutoGenerateColumns="False"                     
-                      IsReadOnly="False"
-                      GridLinesVisibility="None"
-                      RowHeight="44"
-                      Background="White">
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Background" Value="#F3F4F6"/>
+                            <Setter Property="Foreground" Value="#111827"/>
+                            <Setter Property="Padding" Value="12,10"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+                            <Setter Property="BorderThickness" Value="0,0,1,2"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
 
-                <DataGrid.Columns>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#F0F7FF"/>
+                                    <Setter Property="Foreground" Value="#1E40AF"/>
+                                    <Setter Property="BorderBrush" Value="#BFDBFE"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
 
-                    <DataGridTextColumn Header="Proje Id" Binding="{Binding Id}" Width="80"/>
-                    <DataGridTextColumn Header="Firma" Binding="{Binding Firma}" Width="200"/>
-                    <DataGridTextColumn Header="Bölge(Montage Ort)" Binding="{Binding Bolge}" Width="140"/>
-                    <DataGridTextColumn Header="HK" Binding="{Binding HK}" Width="100"/>
-                    <DataGridTextColumn Header="SM" Binding="{Binding SM}" Width="100"/>
-                    <DataGridTextColumn Header="NVT" Binding="{Binding HKNVT}" Width="120"/>
-                    <DataGridTextColumn Header="İlk Ölçüm (Erstmessung)" Binding="{Binding Erstmessung}" Width="150"/>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Proje Id" Binding="{Binding Id}" Width="0.8*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="Firma" Binding="{Binding Firma}" Width="1.8*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="5,0"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="Bölge" Binding="{Binding Bolge}" Width="1.3*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="5,0"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                     
+                        <DataGridTextColumn Header="HK" Binding="{Binding HK}" Width="0.7*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="5,0"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="SM" Binding="{Binding SM}" Width="0.7*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="5,0"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="NVT" Binding="{Binding NVT}" Width="0.9*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="5,0"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="İlk Ölçüm" Binding="{Binding Erstmessung}" Width="1.5*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Padding" Value="5,0"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Header="Proje Durumu" Width="1.6*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Height="32" Margin="4,2" VerticalContentAlignment="Center">
+                                        <ComboBoxItem Content="İşlem yapılmadı"/>
+                                        <ComboBoxItem Content="İşlem yapılamıyor"/>
+                                        <ComboBoxItem Content="İşlem tamamlandı"/>
+                                    </ComboBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Detay" Width="0.6*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="📝" 
+                            Width="36" 
+                            Height="28" 
+                            Cursor="Hand" 
+                            Focusable="False" 
+                            Background="#F3F4F6"
+                            BorderBrush="#D1D5DB"
+                            Click="BtnOpenNote_Click" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Popup x:Name="NotePopup" 
+                       Placement="Center" 
+                       PlacementTarget="{Binding ElementName=NewJobsGrid}"
+                       AllowsTransparency="True"
+                       StaysOpen="False">
                     
-                    <!-- SAHA DURUMU -->
-                    <DataGridTemplateColumn Header="Proje Durumu" Width="180">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox SelectedValue="{Binding FieldStatus, Mode=TwoWay}"
-                                          SelectedValuePath="Tag"
-                                          Height="30">
-                                    <ComboBoxItem Content="İşlem yapılmadı" Tag="0"/>
-                                    <ComboBoxItem Content="İşlem yapılamıyor" Tag="1"/>
-                                    <ComboBoxItem Content="İşlem tamamlandı" Tag="2"/>
-                                </ComboBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <!-- DETAY -->
-                    <DataGridTemplateColumn Header="Detay" Width="80">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="📝"
-                                        Width="40"
-                                        Height="30"
-                                        Cursor="Hand"
-                                        Tag="{Binding}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                </DataGrid.Columns>
-            </DataGrid>
-
+                    <Border Background="White" 
+                            BorderBrush="#2563EB" 
+                            BorderThickness="2" 
+                            CornerRadius="12" 
+                            Padding="20" 
+                            Width="350">
+                        
+                        <StackPanel>
+                            <TextBlock Text="Proje Notu" 
+                                       FontWeight="Bold" 
+                                       FontSize="16" 
+                                       Margin="0,0,0,12" 
+                                       Foreground="#1F2937"/>
+                            
+                            <TextBox x:Name="TxtProjectNote" 
+                                     Height="120" 
+                                     TextWrapping="Wrap" 
+                                     AcceptsReturn="True" 
+                                     Padding="5" 
+                                     Margin="0,0,0,15"/>
+                            
+                            <UniformGrid Columns="2">
+                                <Button Content="İptal" 
+                                        Click="BtnCloseNote_Click"
+                                        Margin="0,0,5,0" 
+                                        Height="35"
+                                        Background="#E5E7EB" 
+                                        BorderThickness="0"/>
+                                
+                                <Button Content="Kaydet" 
+                                        Background="#2563EB" 
+                                        Foreground="White" 
+                                        Height="35"
+                                        BorderThickness="0"/>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+                </Popup>
+            </Grid>
         </Border>
     </Grid>
 </Window>

@@ -13,7 +13,7 @@ namespace FiberJobManager.Desktop.Models
         public string Bolge { get; set; }
         public string HK { get; set; }
         public string SM { get; set; }
-        public string HKNVT { get; set; }
+        public string NVT { get; set; }
         public string Erstmessung { get; set; }
 
         // 0 = yapılmadı, 1 = yapılamıyor, 2 = tamamlandı
