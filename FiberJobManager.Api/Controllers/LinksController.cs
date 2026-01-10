@@ -1,8 +1,7 @@
 ﻿using FiberJobManager.Api.Data;
-using FiberJobManager.Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace FiberJobManager.Api.Controllers
 {
@@ -17,34 +16,24 @@ namespace FiberJobManager.Api.Controllers
             _context = context;
         }
 
-        // 🔓 Herkes linkleri görebilir (Worker + Admin)
+        // ✅ Herkes görebilsin (JWT varsa çalışır, [Authorize] koymadım)
+        // Eğer genel olarak global authorize yaptıysan ve bunun da JWT istemesini istiyorsan,
+        // [Authorize] ekleyebilirsin.
         [HttpGet]
-        public IActionResult GetLinks()
+        public async Task<IActionResult> GetLinks()
         {
-            var links = _context.TempDocuments
+            // tempdocuments tablosundan "link gibi" döndürüyoruz
+            var links = await _context.TempDocuments
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new
                 {
-                    x.Id,
-                    x.FileName,
-                    x.Firma,
-                    x.ProjeTuru,
-                    Url = x.DriveUrl,
-                    x.CreatedAt
+                    id = x.Id,
+                    title = (x.Firma ?? "") + " - " + (x.FileName ?? ""),
+                    url = x.DriveUrl
                 })
-                .ToList();
+                .ToListAsync();
 
             return Ok(links);
-        }
-
-        // 🔐 Sadece Admin link ekleyebilir
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> AddLink([FromBody] TempDocument model)
-        {
-            _context.TempDocuments.Add(model);
-            await _context.SaveChangesAsync();
-            return Ok(model);
         }
     }
 }

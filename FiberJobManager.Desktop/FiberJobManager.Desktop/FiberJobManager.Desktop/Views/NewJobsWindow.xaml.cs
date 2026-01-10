@@ -13,7 +13,8 @@ namespace FiberJobManager.Desktop.Views
     public partial class NewJobsWindow : Window
     {
         public ObservableCollection<JobRowModel> Jobs { get; set; }
-        private JobRowModel _selectedJob;
+        // Artık sadece o an üzerinde işlem yapılan işi tutmak için kullanıyoruz
+        private JobRowModel _activeJob;
 
         public NewJobsWindow()
         {
@@ -21,7 +22,6 @@ namespace FiberJobManager.Desktop.Views
             LoadJobsFromApi();
         }
 
-        // 🔹 Kullanıcıya atanmış new projeleri API’den çeker
         private async void LoadJobsFromApi()
         {
             try
@@ -35,7 +35,6 @@ namespace FiberJobManager.Desktop.Views
                 }
 
                 var json = await response.Content.ReadAsStringAsync();
-
                 var jobs = JsonSerializer.Deserialize<List<JobRowModel>>(json,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
@@ -49,41 +48,40 @@ namespace FiberJobManager.Desktop.Views
             }
         }
 
-        // 🔹 Satır seçimi
-        private void NewJobsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            _selectedJob = NewJobsGrid.SelectedItem as JobRowModel;
-        }
-
-        // 📝 Detay butonu
+        // 📝 Detay Butonu - Satır seçimine gerek duymadan çalışır
         private void BtnOpenNote_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedJob == null)
-            {
-                MessageBox.Show("Lütfen önce bir proje seçin.");
-                return;
-            }
+            // Tıklanan butonu yakalıyoruz
+            var button = sender as Button;
 
-            TxtProjectNote.Text = "";
-            NotePopup.IsOpen = true;
+            // Butonun DataContext'i direkt olarak o satırdaki JobRowModel'dir
+            if (button?.DataContext is JobRowModel clickedJob)
+            {
+                _activeJob = clickedJob; // Üzerinde işlem yapacağımız işi hafızaya alıyoruz
+                TxtProjectNote.Text = "";
+                NotePopup.IsOpen = true;
+                TxtProjectNote.Focus(); // Kullanıcı hemen yazabilsin diye focus yapıyoruz
+            }
         }
 
-        // ❌ Popup kapat
         private void BtnCloseNote_Click(object sender, RoutedEventArgs e)
         {
             NotePopup.IsOpen = false;
+            _activeJob = null;
         }
 
-        // 💾 Kaydet → API → DB
+        // 💾 Kaydet
         private async void BtnSaveNote_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedJob == null)
+            if (_activeJob == null)
             {
-                MessageBox.Show("Lütfen bir proje seçin.");
+                MessageBox.Show("İşlem yapılacak proje bulunamadı.");
                 return;
             }
 
-            if (TxtProjectNote.Text.Length > 150)
+            string noteText = TxtProjectNote.Text.Trim();
+
+            if (noteText.Length > 150)
             {
                 MessageBox.Show("Not 150 karakteri geçemez.");
                 return;
@@ -91,8 +89,8 @@ namespace FiberJobManager.Desktop.Views
 
             var payload = new
             {
-                status = _selectedJob.FieldStatus,
-                note = TxtProjectNote.Text
+                status = _activeJob.Status, // DataGrid içindeki ComboBox'tan gelen güncel durum
+                note = noteText
             };
 
             var json = JsonSerializer.Serialize(payload);
@@ -100,15 +98,14 @@ namespace FiberJobManager.Desktop.Views
 
             try
             {
-                var url = $"/api/jobs/{_selectedJob.Id}/field-report";
-
+                var url = $"/api/jobs/{_activeJob.Id}/field-report";
                 var response = await App.ApiClient.PostAsync(url, content);
 
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Saha notu kaydedildi.");
                     NotePopup.IsOpen = false;
-                    TxtProjectNote.Text = "";
+                    _activeJob = null;
                 }
                 else
                 {

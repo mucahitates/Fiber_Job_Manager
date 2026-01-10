@@ -1,11 +1,14 @@
 ﻿using FiberJobManager.Api.Data;
 using FiberJobManager.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FiberJobManager.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize] // JWT zorunlu
     public class PeopleController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -15,23 +18,26 @@ namespace FiberJobManager.Api.Controllers
             _context = context;
         }
 
-        [HttpGet] //Tüm kişileri getirir
-        public IActionResult GetPeople()
+        // Tüm kişileri getir
+        [HttpGet]
+        public async Task<IActionResult> GetPeople()
         {
-            var people = _context.People.ToList();
+            var people = await _context.People
+                .OrderBy(x => x.Company)
+                .ThenBy(x => x.Name)
+                .ToListAsync();
+
             return Ok(people);
         }
 
-        [HttpPost] // Yeni kişi ekle (Admin'e özel)
-        public async Task<IActionResult> AddPerson([FromBody] Person model)
+        // Admin yeni kişi ekleyebilsin
+        [HttpPost]
+        [Authorize(Roles = "Boss")]
+        public async Task<IActionResult> AddPerson([FromBody] Person person)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            _context.People.Add(model);
+            _context.People.Add(person);
             await _context.SaveChangesAsync();
-
-            return Ok(model);
+            return Ok(person);
         }
     }
 }

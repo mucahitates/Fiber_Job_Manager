@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,26 +11,9 @@ namespace FiberJobManager.Desktop.Views
 {
     public partial class LinksWindow : Window
     {
-        private readonly HttpClient _http;
-
         public LinksWindow()
         {
             InitializeComponent();
-
-            _http = new HttpClient
-            {
-                BaseAddress = new Uri("http://localhost:5210")
-            };
-
-            // 🔐 Login sonrası kaydedilen JWT burada header’a giriliyor
-            var token = FiberJobManager.Desktop.Properties.Settings.Default.Token;
-
-            if (!string.IsNullOrWhiteSpace(token))
-            {
-                _http.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", token);
-            }
-
             LoadData();
         }
 
@@ -39,8 +21,8 @@ namespace FiberJobManager.Desktop.Views
         {
             try
             {
-                var links = await _http.GetFromJsonAsync<List<LinkModel>>("/api/links");
-                var people = await _http.GetFromJsonAsync<List<PersonModel>>("/api/people");
+                var links = await App.ApiClient.GetFromJsonAsync<List<LinkModel>>("/api/links");
+                var people = await App.ApiClient.GetFromJsonAsync<List<PersonModel>>("/api/people");
 
                 lstLinks.ItemsSource = links;
                 lstPeople.ItemsSource = people;
@@ -51,9 +33,10 @@ namespace FiberJobManager.Desktop.Views
             }
         }
 
+
         private void lstLinks_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lstLinks.SelectedItem is LinkModel selected)
+            if (lstLinks.SelectedItem is LinkModel selected && !string.IsNullOrWhiteSpace(selected.Url))
             {
                 Process.Start(new ProcessStartInfo
                 {
