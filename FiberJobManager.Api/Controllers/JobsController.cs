@@ -223,6 +223,7 @@ namespace FiberJobManager.Api.Controllers
             // Status = "Revision" olan işleri çek
             var jobs = await _context.Jobs
                 .Where(j => j.AssignedUserId == userId && j.Status == "Revision")
+                .Include(j => j.RevisionAssignedByUser)  // 🔥 Revizeyi atayan kullanıcıyı dahil et
                 .Select(j => new
                 {
                     j.Id,
@@ -237,7 +238,9 @@ namespace FiberJobManager.Api.Controllers
                     j.Status,
                     j.RevisionReason,
                     j.RevisionDate,
-                    // En son field report'tan FieldStatus'u al
+                    RevisionAssignedByName = j.RevisionAssignedByUser != null
+                        ? j.RevisionAssignedByUser.Name
+                        : "Bilinmiyor",  // 🔥 Revizeyi atayan kişinin adı
                     FieldStatus = _context.JobFieldReports
                         .Where(r => r.JobId == j.Id)
                         .OrderByDescending(r => r.CreatedAt)
@@ -248,6 +251,7 @@ namespace FiberJobManager.Api.Controllers
 
             return Ok(jobs);
         }
+
 
         // GET: api/jobs/{jobId}/revision-note
         // İşin revize nedeni ve worker notunu getirir
@@ -273,14 +277,36 @@ namespace FiberJobManager.Api.Controllers
             return Ok(response);
         }
 
+        
         // PUT: api/jobs/{jobId}/set-revision
-        // Admin bir işi revizeye alır
+        // Admin veya misafir kullanıcı bir işi revizeye alır
+        [Authorize]
         [HttpPut("{jobId}/set-revision")]
-        public async Task<IActionResult> SetJobRevision(int jobId, [FromBody] SetRevisionDto dto)
+        public async Task<IActionResult> SetJobRevision(int jobId, [FromBody] SetRevision dto)
         {
             var job = await _context.Jobs.FindAsync(jobId);
             if (job == null)
                 return NotFound("İş kaydı bulunamadı");
+
+            // Giriş yapan kullanıcı
+            var userId = int.Parse(User.FindFirst("userId").Value);
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+                return Unauthorized("Kullanıcı bulunamadı");
+
+            // 🔥 YENİ: Misafir kullanıcı kontrolü
+            // Misafir kullanıcı sadece kendi firmasındaki işleri revizeye alabilir
+            if (user.Role == "Guest" && job.Firma != user.Company)
+            {
+                return Forbid("Sadece kendi firmanıza ait işleri revizeye alabilirsiniz!");
+            }
+
+            // Admin ve Boss her şeyi yapabilir
+            if (user.Role != "Admin" && user.Role != "Boss" && user.Role != "Guest")
+            {
+                return Forbid("Revize atama yetkiniz yok!");
+            }
 
             // Türkiye saati
             var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
@@ -289,17 +315,18 @@ namespace FiberJobManager.Api.Controllers
             job.Status = "Revision";
             job.RevisionReason = dto.RevisionReason;
             job.RevisionDate = turkeyTime;
+            job.RevisionAssignedBy = userId;  // 🔥 Kim revizeye aldı
 
             await _context.SaveChangesAsync();
 
-            return Ok(job);
+            return Ok(new
+            {
+                message = "İş revizeye alındı",
+                job = job,
+                assignedBy = user.Name
+            });
         }
 
-        // DTO
-        public class SetRevisionDto
-        {
-            public string RevisionReason { get; set; }
-        }
-
+       
     }
 }

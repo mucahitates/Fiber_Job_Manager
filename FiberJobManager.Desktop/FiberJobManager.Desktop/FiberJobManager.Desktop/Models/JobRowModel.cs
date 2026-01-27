@@ -51,5 +51,9 @@ namespace FiberJobManager.Desktop.Models
 
         [JsonPropertyName("revisionDate")]
         public DateTime? RevisionDate { get; set; }
+
+        // Revizyonu atayan kullanıcı adı
+        [JsonPropertyName("revisionAssignedByName")]
+        public string RevisionAssignedByName { get; set; }
     }
 }

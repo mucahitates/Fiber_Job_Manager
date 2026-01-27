@@ -9,5 +9,8 @@
         public string Password { get; set; }
         public string UserSurname { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Misafir kullanıcılar için firma bilgisi
+        public string? Company { get; set; }  // Örn: "Quick City", "Berasco"
     }
 }

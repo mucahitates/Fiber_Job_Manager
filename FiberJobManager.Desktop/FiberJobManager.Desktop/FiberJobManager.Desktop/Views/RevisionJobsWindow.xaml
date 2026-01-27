@@ -197,6 +197,20 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
+                        <!-- Revize Atayan -->
+                        <DataGridTextColumn Header="Revize Atayan"
+                                            Binding="{Binding RevisionAssignedByName}"
+                                            Width="1.2*"
+                                            FontSize="16"
+                                            FontWeight="SemiBold">  
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="Foreground" Value="#6B7280"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
                         <!-- Detay Butonu -->
                         <DataGridTemplateColumn Header="Detay" Width="0.6*">

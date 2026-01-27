@@ -1,4 +1,6 @@
-﻿namespace FiberJobManager.Api.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace FiberJobManager.Api.Models
 {
     public class Job
     {
@@ -19,6 +21,12 @@
 
         public string RevisionReason { get; set; }  // Admin'in revize nedeni
         public DateTime? RevisionDate { get; set; }  // Revizeye alınma tarihi
+
+        //Revizyonu atayan kullanıcı
+        public int? RevisionAssignedBy { get; set; }  // User ID
+       
+        [ForeignKey("RevisionAssignedBy")]  
+        public User? RevisionAssignedByUser { get; set; }  // Navigation property
 
     }
 }
