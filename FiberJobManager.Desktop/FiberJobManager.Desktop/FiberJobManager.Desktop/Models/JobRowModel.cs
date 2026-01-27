@@ -39,5 +39,8 @@ namespace FiberJobManager.Desktop.Models
         // 🔥 YENİ: Saha durumu (ComboBox için)
         // 0 = Yapılmadı, 1 = Yapılamıyor, 2 = Tamamlandı
         public int FieldStatus { get; set; } = 0;
+
+        [JsonPropertyName("completedDate")]
+        public DateTime? CompletedDate { get; set; }
     }
 }
