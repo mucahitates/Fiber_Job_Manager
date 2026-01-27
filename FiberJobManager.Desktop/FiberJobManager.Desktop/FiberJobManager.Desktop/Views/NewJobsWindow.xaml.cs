@@ -105,10 +105,11 @@ namespace FiberJobManager.Desktop.Views
 
             string noteText = TxtProjectNote.Text.Trim();
 
-            // 🔥 YENİ: Tamamlandı seçiliyse NOT zorunlu
-            if (_activeJob.FieldStatus == 2 && string.IsNullOrWhiteSpace(noteText))
+            // 🔥 YENİ: Yapılamıyor veya Tamamlandı seçiliyse NOT zorunlu
+            if ((_activeJob.FieldStatus == 1 || _activeJob.FieldStatus == 2) && string.IsNullOrWhiteSpace(noteText))
             {
-                MessageBox.Show("Projeyi tamamlamak için not girmelisiniz!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var statusText = _activeJob.FieldStatus == 1 ? "Yapılamıyor" : "Tamamlandı";
+                MessageBox.Show($"Durumu '{statusText}' olarak işaretlemek için not girmelisiniz!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -132,29 +133,32 @@ namespace FiberJobManager.Desktop.Views
                 var url = $"/api/jobs/{_activeJob.Id}/field-report";
                 var response = await App.ApiClient.PostAsync(url, content);
 
-                // Detaylı hata mesajı göster
                 if (response.IsSuccessStatusCode)
                 {
-                    // 🔥 FieldStatus = 2 (Tamamlandı) ise özel mesaj
-                    if (_activeJob.FieldStatus == 2)
+                    // 🔥 Mesaj güncelle
+                    if (_activeJob.FieldStatus == 1)
+                    {
+                        MessageBox.Show("Proje 'Yapılamıyor' olarak işaretlendi ve revizeye alındı!", "Başarılı", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else if (_activeJob.FieldStatus == 2)
                     {
                         MessageBox.Show("Proje başarıyla tamamlandı! 'Tamamlanan İşler' alanına taşındı.", "Başarılı", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
-                        MessageBox.Show("Not kaydedildi.");
+                        MessageBox.Show("Saha notu kaydedildi.");
                     }
 
                     NotePopup.IsOpen = false;
                     _activeJob = null;
 
-                    // Listeyi yenile (tamamlanan iş grid'den çıkar)
+                    // Listeyi yenile
                     LoadJobsFromApi();
                 }
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show($"API Hatası:\nStatus Code: {response.StatusCode}\nDetay: {errorContent}");
+                    MessageBox.Show($"API Hatası:\n{errorContent}");
                 }
             }
             catch (Exception ex)

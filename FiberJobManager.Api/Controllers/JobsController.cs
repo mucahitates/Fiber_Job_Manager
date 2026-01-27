@@ -149,9 +149,11 @@ namespace FiberJobManager.Api.Controllers
             // Token'dan userId al
             var userId = int.Parse(User.FindFirst("userId").Value);
 
-            // 🔥 YENİ: Sadece tamamlanmamış (Status != "Completed") işleri çek
+            // 🔥 YENİ: Hem Completed hem Revision'ı hariç tut
             var jobs = await _context.Jobs
-                .Where(j => j.AssignedUserId == userId && j.Status != "Completed")
+                .Where(j => j.AssignedUserId == userId
+                         && j.Status != "Completed"
+                         && j.Status != "Revision")  // ← Bu satırı ekle
                 .Select(j => new
                 {
                     j.Id,
