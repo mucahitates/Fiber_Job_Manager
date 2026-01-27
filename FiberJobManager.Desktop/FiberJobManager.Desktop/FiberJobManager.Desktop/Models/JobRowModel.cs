@@ -42,5 +42,14 @@ namespace FiberJobManager.Desktop.Models
 
         [JsonPropertyName("completedDate")]
         public DateTime? CompletedDate { get; set; }
+
+        
+        //Revize 
+
+        [JsonPropertyName("revisionReason")]
+        public string RevisionReason { get; set; }
+
+        [JsonPropertyName("revisionDate")]
+        public DateTime? RevisionDate { get; set; }
     }
 }
