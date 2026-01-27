@@ -95,7 +95,6 @@ namespace FiberJobManager.Desktop.Views
         }
 
         // 💾 Kaydet
-        
         private async void BtnSaveNote_Click(object sender, RoutedEventArgs e)
         {
             if (_activeJob == null)
@@ -106,6 +105,13 @@ namespace FiberJobManager.Desktop.Views
 
             string noteText = TxtProjectNote.Text.Trim();
 
+            // 🔥 YENİ: Tamamlandı seçiliyse NOT zorunlu
+            if (_activeJob.FieldStatus == 2 && string.IsNullOrWhiteSpace(noteText))
+            {
+                MessageBox.Show("Projeyi tamamlamak için not girmelisiniz!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             if (noteText.Length > 150)
             {
                 MessageBox.Show("Not 150 karakteri geçemez.");
@@ -114,7 +120,7 @@ namespace FiberJobManager.Desktop.Views
 
             var payload = new
             {
-                status = _activeJob.FieldStatus, // 🔥 Artık FieldStatus (int) kullanıyoruz
+                status = _activeJob.FieldStatus,
                 note = noteText
             };
 
@@ -129,11 +135,20 @@ namespace FiberJobManager.Desktop.Views
                 // Detaylı hata mesajı göster
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("Not kaydedildi.");
+                    // 🔥 FieldStatus = 2 (Tamamlandı) ise özel mesaj
+                    if (_activeJob.FieldStatus == 2)
+                    {
+                        MessageBox.Show("Proje başarıyla tamamlandı! 'Tamamlanan İşler' alanına taşındı.", "Başarılı", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Saha notu kaydedildi.");
+                    }
+
                     NotePopup.IsOpen = false;
                     _activeJob = null;
 
-                    // Listeyi yenile
+                    // Listeyi yenile (tamamlanan iş grid'den çıkar)
                     LoadJobsFromApi();
                 }
                 else

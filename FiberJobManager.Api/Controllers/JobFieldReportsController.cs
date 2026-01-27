@@ -20,7 +20,7 @@ namespace FiberJobManager.Api.Controllers
         {
             _context = context;
         }
-               
+
         // POST /api/jobs/{jobId}/field-report
         // Bir proje için yeni saha raporu kaydeder
         [HttpPost("{jobId}/field-report")]
@@ -34,6 +34,16 @@ namespace FiberJobManager.Api.Controllers
             // 2️⃣ Giriş yapmış kullanıcının ID'sini al
             var userId = int.Parse(User.FindFirst("userId").Value);
 
+            // 🔥 YENİ: Tamamlandı seçiliyse NOT zorunlu
+            if (dto.Status == 2 && string.IsNullOrWhiteSpace(dto.Note))
+            {
+                return BadRequest("Projeyi tamamlamak için not girmelisiniz!");
+            }
+
+            // Türkiye saati hesapla
+            var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+            var turkeyTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, turkeyTimeZone);
+
             // 3️⃣ Saha raporu oluştur
             var report = new JobFieldReport
             {
@@ -41,13 +51,13 @@ namespace FiberJobManager.Api.Controllers
                 UserId = userId,
                 FieldStatus = dto.Status,
                 Note = dto.Note,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = turkeyTime // Türkiye saati
             };
 
             _context.JobFieldReports.Add(report);
 
-            // 4️⃣  FieldStatus = 2 (Tamamlandı) ise iş durumunu güncelle
-            if (dto.Status == 2)
+            // 4️⃣ FieldStatus = 2 (Tamamlandı) VE NOT varsa iş durumunu güncelle
+            if (dto.Status == 2 && !string.IsNullOrWhiteSpace(dto.Note))
             {
                 job.Status = "Completed"; // İş "Biten İşler"e taşınır
             }

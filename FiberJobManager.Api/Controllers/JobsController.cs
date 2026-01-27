@@ -149,9 +149,9 @@ namespace FiberJobManager.Api.Controllers
             // Token'dan userId al
             var userId = int.Parse(User.FindFirst("userId").Value);
 
-            // Kullanıcıya atanmış işleri çek
+            // 🔥 YENİ: Sadece tamamlanmamış (Status != "Completed") işleri çek
             var jobs = await _context.Jobs
-                .Where(j => j.AssignedUserId == userId)
+                .Where(j => j.AssignedUserId == userId && j.Status != "Completed")
                 .Select(j => new
                 {
                     j.Id,
@@ -164,7 +164,7 @@ namespace FiberJobManager.Api.Controllers
                     j.NVT,
                     j.FirstMeasurement,
                     j.Status,
-                    // 🔥 YENİ: En son field report'tan FieldStatus'u al
+                    // En son field report'tan FieldStatus'u al
                     FieldStatus = _context.JobFieldReports
                         .Where(r => r.JobId == j.Id)
                         .OrderByDescending(r => r.CreatedAt)
