@@ -79,5 +79,11 @@ namespace FiberJobManager.Desktop
             var win = new CompletedJobsWindow();
             win.Show();
         }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            var win = new RevisionJobsWindow();
+            win.Show();
+        }
     }
 }

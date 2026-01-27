@@ -119,6 +119,7 @@
     <Compile Include="Models\JobRowModel.cs" />
     <Compile Include="Models\LinkModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
+    <Compile Include="Models\RevisionNoteModel.cs" />
     <Compile Include="Models\TempDocument.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Views\CompletedJobsWindow.xaml.cs">
@@ -129,6 +130,9 @@
     </Compile>
     <Compile Include="Views\NewJobsWindow.xaml.cs">
       <DependentUpon>NewJobsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RevisionJobsWindow.xaml.cs">
+      <DependentUpon>RevisionJobsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TempDocumentsWindow.xaml.cs">
       <DependentUpon>TempDocumentsWindow.xaml</DependentUpon>
@@ -162,6 +166,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewJobsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RevisionJobsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

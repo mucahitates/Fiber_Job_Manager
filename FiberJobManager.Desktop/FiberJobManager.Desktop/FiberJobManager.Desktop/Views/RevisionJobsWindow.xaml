@@ -171,6 +171,7 @@
                                         </Ellipse>
                                         <!-- ComboBox -->
                                         <ComboBox SelectedValue="{Binding FieldStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  HorizontalAlignment="Center"
                                                   SelectedValuePath="Tag"
                                                   Width="120">
                                             <ComboBoxItem Content="Yapılmadı" Tag="0" />

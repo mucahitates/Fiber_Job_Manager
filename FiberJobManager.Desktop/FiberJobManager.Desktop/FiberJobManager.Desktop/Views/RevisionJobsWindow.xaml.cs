@@ -140,7 +140,7 @@ namespace FiberJobManager.Desktop.Views
                     }
                     else
                     {
-                        MessageBox.Show("Saha notu kaydedildi.");
+                        MessageBox.Show("Not kaydedildi.");
                     }
 
                     NotePopup.IsOpen = false;
