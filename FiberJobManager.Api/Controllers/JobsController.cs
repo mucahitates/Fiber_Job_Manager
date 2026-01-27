@@ -212,6 +212,94 @@ namespace FiberJobManager.Api.Controllers
             return Ok(jobs);
         }
 
+        // GET: api/jobs/my-revision
+        // Kullanıcıya atanmış revize bekleyen işleri listeler
+        [HttpGet("my-revision")]
+        public async Task<IActionResult> GetMyRevisionJobs()
+        {
+            // Token'dan userId al
+            var userId = int.Parse(User.FindFirst("userId").Value);
+
+            // Status = "Revision" olan işleri çek
+            var jobs = await _context.Jobs
+                .Where(j => j.AssignedUserId == userId && j.Status == "Revision")
+                .Select(j => new
+                {
+                    j.Id,
+                    j.Title,
+                    j.Description,
+                    j.Firma,
+                    j.Region,
+                    j.HK,
+                    j.SM,
+                    j.NVT,
+                    j.FirstMeasurement,
+                    j.Status,
+                    j.RevisionReason,
+                    j.RevisionDate,
+                    // En son field report'tan FieldStatus'u al
+                    FieldStatus = _context.JobFieldReports
+                        .Where(r => r.JobId == j.Id)
+                        .OrderByDescending(r => r.CreatedAt)
+                        .Select(r => r.FieldStatus)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+
+            return Ok(jobs);
+        }
+
+        // GET: api/jobs/{jobId}/revision-note
+        // İşin revize nedeni ve worker notunu getirir
+        [HttpGet("{jobId}/revision-note")]
+        public async Task<IActionResult> GetRevisionNote(int jobId)
+        {
+            var job = await _context.Jobs.FindAsync(jobId);
+            if (job == null)
+                return NotFound("İş kaydı bulunamadı");
+
+            // En son field report'u çek (worker notu için)
+            var latestReport = await _context.JobFieldReports
+                .Where(r => r.JobId == jobId)
+                .OrderByDescending(r => r.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            var response = new
+            {
+                revisionReason = job.RevisionReason ?? "Revize nedeni girilmemiş.",
+                workerNote = latestReport?.Note ?? ""
+            };
+
+            return Ok(response);
+        }
+
+        // PUT: api/jobs/{jobId}/set-revision
+        // Admin bir işi revizeye alır
+        [HttpPut("{jobId}/set-revision")]
+        public async Task<IActionResult> SetJobRevision(int jobId, [FromBody] SetRevisionDto dto)
+        {
+            var job = await _context.Jobs.FindAsync(jobId);
+            if (job == null)
+                return NotFound("İş kaydı bulunamadı");
+
+            // Türkiye saati
+            var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+            var turkeyTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, turkeyTimeZone);
+
+            job.Status = "Revision";
+            job.RevisionReason = dto.RevisionReason;
+            job.RevisionDate = turkeyTime;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(job);
+        }
+
+        // DTO
+        public class SetRevisionDto
+        {
+            public string RevisionReason { get; set; }
+        }
 
     }
 }
