@@ -134,7 +134,8 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Header="İlk Ölçüm" Binding="{Binding Erstmessung}" Width="1.5*">
+                        <DataGridTextColumn Header="İlk Ölçüm" Binding="{Binding FirstMeasurement, StringFormat=dd.MM.yyyy}"
+ Width="1.5*">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -147,9 +148,9 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <ComboBox Height="32" Margin="4,2" VerticalContentAlignment="Center">
-                                        <ComboBoxItem Content="İşlem yapılmadı"/>
-                                        <ComboBoxItem Content="İşlem yapılamıyor"/>
-                                        <ComboBoxItem Content="İşlem tamamlandı"/>
+                                        <ComboBoxItem Content="İşlem yapılmadı" Tag="0"/>
+                                        <ComboBoxItem Content="İşlem yapılamıyor" Tag="1"/>
+                                        <ComboBoxItem Content="İşlem tamamlandı" Tag="2"/>
                                     </ComboBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -207,11 +208,13 @@
                                         Background="#E5E7EB" 
                                         BorderThickness="0"/>
 
-                                <Button Content="Kaydet" 
-                                        Background="#2563EB" 
-                                        Foreground="White" 
-                                        Height="35"
-                                        BorderThickness="0"/>
+                                <Button Content="Kaydet"
+                                 Background="#2563EB"
+                                 Foreground="White"
+                                 Height="35"
+                                 BorderThickness="0"
+                                 Click="BtnSaveNote_Click"
+                                  />  
                             </UniformGrid>
                         </StackPanel>
                     </Border>

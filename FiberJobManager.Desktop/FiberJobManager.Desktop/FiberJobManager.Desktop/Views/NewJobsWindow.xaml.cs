@@ -48,19 +48,43 @@ namespace FiberJobManager.Desktop.Views
             }
         }
 
-        // 📝 Detay Butonu - Satır seçimine gerek duymadan çalışır
-        private void BtnOpenNote_Click(object sender, RoutedEventArgs e)
-        {
-            // Tıklanan butonu yakalıyoruz
-            var button = sender as Button;
 
-            // Butonun DataContext'i direkt olarak o satırdaki JobRowModel'dir
+        // 📝 Detay Butonu - Not popup'ını açar
+        private async void BtnOpenNote_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
             if (button?.DataContext is JobRowModel clickedJob)
             {
-                _activeJob = clickedJob; // Üzerinde işlem yapacağımız işi hafızaya alıyoruz
-                TxtProjectNote.Text = "";
+                _activeJob = clickedJob;
+
+                // Notu API'den çek
+                try
+                {
+                    var url = $"/api/jobs/{_activeJob.Id}/field-report";
+                    var response = await App.ApiClient.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = await response.Content.ReadAsStringAsync();
+
+                        // JSON'u JobFieldReport objesine parse et
+                        var report = JsonSerializer.Deserialize<JobFieldReportModel>(json,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                        TxtProjectNote.Text = report?.Note ?? "";
+                    }
+                    else
+                    {
+                        TxtProjectNote.Text = "";
+                    }
+                }
+                catch
+                {
+                    TxtProjectNote.Text = "";
+                }
+
                 NotePopup.IsOpen = true;
-                TxtProjectNote.Focus(); // Kullanıcı hemen yazabilsin diye focus yapıyoruz
+                TxtProjectNote.Focus();
             }
         }
 
@@ -71,6 +95,7 @@ namespace FiberJobManager.Desktop.Views
         }
 
         // 💾 Kaydet
+        
         private async void BtnSaveNote_Click(object sender, RoutedEventArgs e)
         {
             if (_activeJob == null)
@@ -89,7 +114,7 @@ namespace FiberJobManager.Desktop.Views
 
             var payload = new
             {
-                status = _activeJob.Status, // DataGrid içindeki ComboBox'tan gelen güncel durum
+                status = _activeJob.FieldStatus, // 🔥 Artık FieldStatus (int) kullanıyoruz
                 note = noteText
             };
 
@@ -101,20 +126,25 @@ namespace FiberJobManager.Desktop.Views
                 var url = $"/api/jobs/{_activeJob.Id}/field-report";
                 var response = await App.ApiClient.PostAsync(url, content);
 
+                // Detaylı hata mesajı göster
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Saha notu kaydedildi.");
                     NotePopup.IsOpen = false;
                     _activeJob = null;
+
+                    // Listeyi yenile
+                    LoadJobsFromApi();
                 }
                 else
                 {
-                    MessageBox.Show("API hata verdi. Kayıt yapılamadı.");
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"API Hatası:\nStatus Code: {response.StatusCode}\nDetay: {errorContent}");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Sunucuya bağlanılamadı:\n" + ex.Message);
+                MessageBox.Show($"Sunucu hatası:\n{ex.Message}");
             }
         }
     }

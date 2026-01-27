@@ -20,38 +20,63 @@ namespace FiberJobManager.Api.Controllers
         {
             _context = context;
         }
-
+               
         // POST /api/jobs/{jobId}/field-report
         // Bir proje için yeni saha raporu kaydeder
         [HttpPost("{jobId}/field-report")]
         public async Task<IActionResult> CreateReport(int jobId, [FromBody] FieldReportDto dto)
         {
-            // 1️⃣ Bu job gerçekten var mı diye kontrol ediyoruz
+            // 1️⃣ İş kaydı var mı kontrol et
             var job = await _context.Jobs.FindAsync(jobId);
             if (job == null)
-                return NotFound("Job not found");
+                return NotFound("İş kaydı bulunamadı");
 
-            // 2️⃣ Şu an giriş yapmış kullanıcının ID’sini alıyoruz
-            // (Login sonrası JWT veya Claim içinde saklı olmalı)
+            // 2️⃣ Giriş yapmış kullanıcının ID'sini al
             var userId = int.Parse(User.FindFirst("userId").Value);
 
-            // 3️⃣ Veritabanına yazılacak saha raporu objesini oluşturuyoruz
+            // 3️⃣ Saha raporu oluştur
             var report = new JobFieldReport
             {
-                JobId = jobId,            // Hangi proje
-                UserId = userId,          // Kim yazdı
-                FieldStatus = dto.Status,// ComboBox’tan gelen saha durumu
-                Note = dto.Note,          // Popup’taki açıklama
-                CreatedAt = DateTime.UtcNow // Ne zaman yazıldı
+                JobId = jobId,
+                UserId = userId,
+                FieldStatus = dto.Status,
+                Note = dto.Note,
+                CreatedAt = DateTime.UtcNow
             };
 
-            // 4️⃣ Entity’yi EF Core'a ekliyoruz
             _context.JobFieldReports.Add(report);
 
-            // 5️⃣ Veritabanına fiziksel olarak kaydediyoruz
+            // 4️⃣  FieldStatus = 2 (Tamamlandı) ise iş durumunu güncelle
+            if (dto.Status == 2)
+            {
+                job.Status = "Completed"; // İş "Biten İşler"e taşınır
+            }
+
+            // 5️⃣ Veritabanına kaydet
             await _context.SaveChangesAsync();
 
-            // 6️⃣ Client’a kaydedilen objeyi geri dönüyoruz
+            return Ok(report);
+        }
+
+        // GET /api/jobs/{jobId}/field-report
+        // İşin en son kaydedilen saha raporunu getirir
+        [HttpGet("{jobId}/field-report")]
+        public async Task<IActionResult> GetLatestReport(int jobId)
+        {
+            // İş kaydı var mı kontrol et
+            var job = await _context.Jobs.FindAsync(jobId);
+            if (job == null)
+                return NotFound("İş kaydı bulunamadı");
+
+            // En son kaydedilen raporu çek
+            var report = await _context.JobFieldReports
+                .Where(r => r.JobId == jobId)
+                .OrderByDescending(r => r.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (report == null)
+                return NotFound("Rapor bulunamadı");
+
             return Ok(report);
         }
     }
@@ -62,4 +87,6 @@ namespace FiberJobManager.Api.Controllers
         public int Status { get; set; }  // 0 = yapılmadı, 1 = yapılamıyor, 2 = tamamlandı
         public string Note { get; set; } // Kullanıcının yazdığı açıklama
     }
+
+
 }
