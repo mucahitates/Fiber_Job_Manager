@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,24 +13,45 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using FiberJobManager.Desktop.Views;
-
-
+using FiberJobManager.Desktop.Models;
 
 namespace FiberJobManager.Desktop
 {
-    /// <summary>
-    /// DashboardWindow.xaml etkileşim mantığı
-    /// </summary>
     public partial class DashboardWindow : Window
     {
         public DashboardWindow()
         {
             InitializeComponent();
-
             lblUserName.Text = $"{Settings.UserName} {Settings.UserSurname}";
             lblEmail.Text = Settings.Email;
 
+            // 🔥 YENİ: Sayaçları yükle
+            LoadJobCounts();
+        }
 
+        // 🔥 YENİ: Sayaçları API'den çek
+        private async void LoadJobCounts()
+        {
+            try
+            {
+                var response = await App.ApiClient.GetAsync("/api/jobs/counts");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var counts = JsonSerializer.Deserialize<JobCountsModel>(json,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    // TextBlock'ları güncelle (XAML'deki isimlere göre)
+                    lblCompleted.Text = counts.CompletedJobs.ToString();
+                    lblRevisions.Text = counts.RevisionJobs.ToString();
+                    lblAssignedDrawings.Text = counts.NewJobs.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Sayaçlar yüklenemedi: {ex.Message}");
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -44,10 +66,6 @@ namespace FiberJobManager.Desktop
                 );
                 return;
             }
-
-            // admin ise aç
-           // var win = new AdminPanelWindow();
-           // win.Show();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -58,7 +76,7 @@ namespace FiberJobManager.Desktop
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            var win =new TempDocumentsWindow();
+            var win = new TempDocumentsWindow();
             await win.LoadDocumentsAsync();
             win.Show();
         }
@@ -71,7 +89,6 @@ namespace FiberJobManager.Desktop
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void Button_Click_5(object sender, RoutedEventArgs e)

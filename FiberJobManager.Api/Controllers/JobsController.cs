@@ -327,6 +327,33 @@ namespace FiberJobManager.Api.Controllers
             });
         }
 
-       
+        // GET: api/jobs/counts
+        // Kullanıcıya ait iş sayaçlarını döndürür
+        [HttpGet("counts")]
+        public async Task<IActionResult> GetJobCounts()
+        {
+            var userId = int.Parse(User.FindFirst("userId").Value);
+
+            var newJobsCount = await _context.Jobs
+                .Where(j => j.AssignedUserId == userId && j.Status != "Completed" && j.Status != "Revision")
+                .CountAsync();
+
+            var revisionJobsCount = await _context.Jobs
+                .Where(j => j.AssignedUserId == userId && j.Status == "Revision")
+                .CountAsync();
+
+            var completedJobsCount = await _context.Jobs
+                .Where(j => j.AssignedUserId == userId && j.Status == "Completed")
+                .CountAsync();
+
+            return Ok(new
+            {
+                newJobs = newJobsCount,
+                revisionJobs = revisionJobsCount,
+                completedJobs = completedJobsCount
+            });
+        }
+
+
     }
 }
