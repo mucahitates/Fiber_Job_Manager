@@ -21,11 +21,16 @@ namespace FiberJobManager.Api.Controllers
             _context = context;
         }
 
+       
         // POST /api/jobs/{jobId}/field-report
         // Bir proje için yeni saha raporu kaydeder
         [HttpPost("{jobId}/field-report")]
         public async Task<IActionResult> CreateReport(int jobId, [FromBody] FieldReportDto dto)
         {
+            // Türkiye saati hesapla
+            var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+            var turkeyTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, turkeyTimeZone);
+
             // 1️⃣ İş kaydı var mı kontrol et
             var job = await _context.Jobs.FindAsync(jobId);
             if (job == null)
@@ -35,14 +40,45 @@ namespace FiberJobManager.Api.Controllers
             var userId = int.Parse(User.FindFirst("userId").Value);
 
             // 🔥 YENİ: Tamamlandı seçiliyse NOT zorunlu
-            if (dto.Status == 2 && string.IsNullOrWhiteSpace(dto.Note))
+            // 4️⃣ Status güncellemesi
+            if (dto.Status == 1 && !string.IsNullOrWhiteSpace(dto.Note))
             {
-                return BadRequest("Projeyi tamamlamak için not girmelisiniz!");
+                // Yapılamıyor → Revizeye al
+                job.Status = "Revision";
+                job.RevisionReason = dto.Note;
+                job.RevisionDate = turkeyTime;
+                job.RevisionAssignedBy = userId;
+
+                // 🔥 YENİ: Revize geçmişine kaydet (worker kendisi revizeye aldı)
+                var revisionHistory = new JobRevisionHistory
+                {
+                    JobId = jobId,
+                    AssignedBy = userId,
+                    AssignedByName = "Worker (Kendisi)",
+                    RevisionReason = dto.Note,
+                    RevisionDate = turkeyTime,
+                    Status = "Active"
+                };
+                _context.JobRevisionHistories.Add(revisionHistory);
+            }
+            else if (dto.Status == 2 && !string.IsNullOrWhiteSpace(dto.Note))
+            {
+                // Tamamlandı → Completed
+                job.Status = "Completed";
+
+                // 🔥 YENİ: Aktif revizeleri tamamla
+                var activeRevisions = await _context.JobRevisionHistories
+                    .Where(h => h.JobId == jobId && h.Status == "Active")
+                    .ToListAsync();
+
+                foreach (var rev in activeRevisions)
+                {
+                    rev.Status = "Completed";
+                    rev.CompletedDate = turkeyTime;
+                }
             }
 
-            // Türkiye saati hesapla
-            var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
-            var turkeyTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, turkeyTimeZone);
+
 
             // 3️⃣ Saha raporu oluştur
             var report = new JobFieldReport

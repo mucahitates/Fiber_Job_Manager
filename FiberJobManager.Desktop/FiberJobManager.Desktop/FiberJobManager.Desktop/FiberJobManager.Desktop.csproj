@@ -119,6 +119,7 @@
     <Compile Include="Models\JobFieldReportModel.cs" />
     <Compile Include="Models\JobRowModel.cs" />
     <Compile Include="Models\LinkModel.cs" />
+    <Compile Include="Models\NullToVisibilityConverter.cs" />
     <Compile Include="Models\PersonModel.cs" />
     <Compile Include="Models\RevisionNoteModel.cs" />
     <Compile Include="Models\TempDocument.cs" />

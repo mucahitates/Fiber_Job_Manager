@@ -5,6 +5,7 @@
         Height="820" Width="1400"
         WindowStartupLocation="CenterScreen"
         Background="#F4F6F9">
+
     <Grid Margin="22">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -21,16 +22,16 @@
                 <TextBlock Text="Revize Bekleyen Projeler" FontSize="28" FontWeight="SemiBold" Foreground="#1F2937"/>
                 <TextBlock Text="Revize edilmesi gereken projeler" FontSize="13" Foreground="#6B7280" Margin="0 4 0 0"/>
             </StackPanel>
-            <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="14" BorderBrush="Black" BorderThickness="1">
+            <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="14" BorderBrush="Red" BorderThickness="2">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Toplam Revize:" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="TxtTotalRevision" Text="0" FontWeight="Bold" FontSize="20" VerticalAlignment="Center" Foreground="#DC2626" Margin="8 0 0 0"/>
+                    <TextBlock Text="Toplam Revize:" FontSize="18" Foreground="Red" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="TxtTotalRevision" Text="0" FontWeight="Bold" FontSize="20" VerticalAlignment="Center" Foreground="#374151" Margin="8 0 0 0"/>
                 </StackPanel>
             </Border>
         </Grid>
 
         <!-- DataGrid -->
-        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="16" BorderBrush="Black" BorderThickness="1" Margin="10">
+        <Border Grid.Row="1" Background="White" CornerRadius="16" Padding="16" BorderBrush="#E5E7EB" BorderThickness="1" Margin="10">
             <Grid>
                 <DataGrid x:Name="RevisionJobsGrid"
                           AutoGenerateColumns="False"
@@ -47,7 +48,7 @@
                           HorizontalGridLinesBrush="#E5E7EB"
                           VerticalGridLinesBrush="#E5E7EB"
                           RowHeight="45" 
-                          AlternatingRowBackground="#FEF2F2"
+                          AlternatingRowBackground="#F9FAFB"
                           ColumnWidth="*">
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
@@ -67,9 +68,9 @@
                             <Setter Property="Focusable" Value="False"/>
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="#FEE2E2"/>
-                                    <Setter Property="Foreground" Value="#991B1B"/>
-                                    <Setter Property="BorderBrush" Value="#FCA5A5"/>
+                                    <Setter Property="Background" Value="#F5F5F5"/>
+                                    <Setter Property="Foreground" Value="#1F2937"/>
+                                    <Setter Property="BorderBrush" Value="#E5E7EB"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -142,12 +143,11 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- Proje Durumu (ComboBox + Durum Göstergesi) -->
+                        <!-- Proje Durumu -->
                         <DataGridTemplateColumn Header="Proje Durumu" Width="1.8*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <!-- Renkli Durum Dairesi -->
                                         <Ellipse Width="12" Height="12" 
                                                  Stroke="Gray" StrokeThickness="1"
                                                  Margin="5,0,8,0"
@@ -160,7 +160,7 @@
                                                             <Setter Property="Fill" Value="Gold"/>
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding FieldStatus}" Value="1">
-                                                            <Setter Property="Fill" Value="Red"/>
+                                                            <Setter Property="Fill" Value="OrangeRed"/>
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding FieldStatus}" Value="2">
                                                             <Setter Property="Fill" Value="LimeGreen"/>
@@ -169,7 +169,6 @@
                                                 </Style>
                                             </Ellipse.Style>
                                         </Ellipse>
-                                        <!-- ComboBox -->
                                         <ComboBox SelectedValue="{Binding FieldStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                   HorizontalAlignment="Center"
                                                   SelectedValuePath="Tag"
@@ -183,7 +182,6 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <!-- Revize Tarihi -->
                         <DataGridTextColumn Header="Revize Tarihi"
                                             Binding="{Binding RevisionDate, StringFormat=dd.MM.yyyy HH:mm}"
                                             Width="1.5*"
@@ -193,16 +191,16 @@
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
-                                    <Setter Property="Foreground" Value="#DC2626"/>
+                                    <Setter Property="Foreground" Value="#374151"/>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <!-- Revize Atayan -->
+
                         <DataGridTextColumn Header="Revize Atayan"
                                             Binding="{Binding RevisionAssignedByName}"
                                             Width="1.2*"
                                             FontSize="16"
-                                            FontWeight="SemiBold">  
+                                            FontWeight="SemiBold">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -212,7 +210,72 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- Detay Butonu -->
+                        <!-- Revize Geçmişi -->
+                        <DataGridTemplateColumn Header="Revize Geçmişi" Width="1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" 
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Cursor="Help"
+                                                ToolTipService.ShowDuration="30000">
+                                        <StackPanel.ToolTip>
+                                            <ToolTip MaxWidth="500">
+                                                <ItemsControl ItemsSource="{Binding RevisionHistory}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Background="#F9FAFB" 
+                                                                    BorderBrush="#E5E7EB" 
+                                                                    BorderThickness="1" 
+                                                                    CornerRadius="8" 
+                                                                    Padding="12" 
+                                                                    Margin="0,0,0,8">
+                                                                <StackPanel>
+                                                                    <TextBlock FontWeight="Bold" 
+                                                                               FontSize="13" 
+                                                                               Foreground="#374151" 
+                                                                               Margin="0,0,0,6">
+                                                                        <Run Text="Revize Atayan: "/>
+                                                                        <Run Text="{Binding AssignedByName}"/>
+                                                                    </TextBlock>
+
+                                                                    <TextBlock FontSize="12" 
+                                                                               Foreground="#4B5563" 
+                                                                               Margin="0,0,0,4">
+                                                                        <Run Text="Neden: " FontWeight="SemiBold"/>
+                                                                        <Run Text="{Binding RevisionReason}"/>
+                                                                    </TextBlock>
+
+                                                                    <TextBlock FontSize="11" 
+                                                                               Foreground="#6B7280" 
+                                                                               Margin="0,0,0,2">
+                                                                        <Run Text="Tarih: "/>
+                                                                        <Run Text="{Binding RevisionDate, StringFormat='dd.MM.yyyy HH:mm'}"/>
+                                                                    </TextBlock>
+
+                                                                    <TextBlock FontSize="11" 
+                                                                               Foreground="#059669">
+                                                                        <Run Text="✓ Tamamlandı: "/>
+                                                                        <Run Text="{Binding CompletedDate, StringFormat='dd.MM.yyyy HH:mm', TargetNullValue=''}"/>
+                                                                    </TextBlock>
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ToolTip>
+                                        </StackPanel.ToolTip>
+
+                                        <TextBlock Text="📋" FontSize="16" Margin="0,0,4,0"/>
+                                        <TextBlock Text="{Binding RevisionCount}" 
+                                                   FontSize="16" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#6B7280"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
                         <DataGridTemplateColumn Header="Detay" Width="0.6*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -221,8 +284,8 @@
                                             Height="28" 
                                             Cursor="Hand" 
                                             Focusable="False" 
-                                            Background="#FEE2E2"
-                                            BorderBrush="#FCA5A5"
+                                            Background="#F3F4F6"
+                                            BorderBrush="Red"
                                             Click="BtnOpenNote_Click" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -237,7 +300,7 @@
                        AllowsTransparency="True"
                        StaysOpen="False">
                     <Border Background="White" 
-                            BorderBrush="#DC2626" 
+                            BorderBrush="#6B7280" 
                             BorderThickness="2" 
                             CornerRadius="12" 
                             Padding="20" 
@@ -245,22 +308,20 @@
                         <StackPanel>
                             <TextBlock Text="Revize Notu" 
                                        FontWeight="Bold" 
-                                       FontSize="16" 
+                                       FontSize="20" 
                                        Margin="0,0,0,12" 
-                                       Foreground="#DC2626"/>
+                                       Foreground="Red"/>
 
-                            <!-- Revize Nedeni (Sadece Okuma) -->
                             <TextBlock Text="Admin Notu:" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtRevisionReason" 
                                      Height="80" 
                                      TextWrapping="Wrap"
                                      IsReadOnly="True"
-                                     Background="#FEF2F2"
+                                     Background="#F9FAFB"
                                      Padding="10" 
                                      Margin="0,0,0,15"
                                      VerticalScrollBarVisibility="Auto"/>
 
-                            <!-- Personel Notu (Yazılabilir) -->
                             <TextBlock Text="Notunuz:" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,5"/>
                             <TextBox x:Name="TxtProjectNote" 
                                      Height="80" 
@@ -277,7 +338,7 @@
                                         Background="#E5E7EB" 
                                         BorderThickness="0"/>
                                 <Button Content="Kaydet"
-                                        Background="#DC2626"
+                                        Background="Green"
                                         Foreground="White"
                                         Height="35"
                                         BorderThickness="0"

@@ -26,6 +26,8 @@ namespace FiberJobManager.Api.Data
 
         public DbSet<JobFieldReport> JobFieldReports { get; set; }
 
+        public DbSet<JobRevisionHistory> JobRevisionHistories { get; set; }
+
 
 
     }

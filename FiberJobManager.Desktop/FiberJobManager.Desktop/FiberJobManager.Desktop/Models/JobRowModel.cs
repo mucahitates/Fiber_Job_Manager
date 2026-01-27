@@ -55,5 +55,30 @@ namespace FiberJobManager.Desktop.Models
         // Revizyonu atayan kullanıcı adı
         [JsonPropertyName("revisionAssignedByName")]
         public string RevisionAssignedByName { get; set; }
+
+        // 🔥 YENİ: Revize geçmişi
+        [JsonPropertyName("revisionCount")]
+        public int RevisionCount { get; set; }
+
+        [JsonPropertyName("revisionHistory")]
+        public List<RevisionHistoryItem> RevisionHistory { get; set; }
+    }
+
+    public class RevisionHistoryItem
+    {
+        [JsonPropertyName("assignedByName")]
+        public string AssignedByName { get; set; }
+
+        [JsonPropertyName("revisionReason")]
+        public string RevisionReason { get; set; }
+
+        [JsonPropertyName("revisionDate")]
+        public DateTime RevisionDate { get; set; }
+
+        [JsonPropertyName("completedDate")]
+        public DateTime? CompletedDate { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
     }
 }
