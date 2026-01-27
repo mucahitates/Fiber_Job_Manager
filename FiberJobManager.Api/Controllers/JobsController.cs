@@ -3,6 +3,7 @@ using FiberJobManager.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 
 namespace FiberJobManager.Api.Controllers
@@ -222,14 +223,33 @@ namespace FiberJobManager.Api.Controllers
         [HttpGet("my-revision")]
         public async Task<IActionResult> GetMyRevisionJobs()
         {
-            // Token'dan userId al
-            var userId = int.Parse(User.FindFirst("userId").Value);
+            try
+            {
+                var userIdClaim = User.FindFirst("userId");
+                if (userIdClaim == null)
+                    return Unauthorized("Token'da userId bulunamadı");
 
-            // Status = "Revision" olan işleri çek
-            var jobs = await _context.Jobs
-                .Where(j => j.AssignedUserId == userId && j.Status == "Revision")
-                .Include(j => j.RevisionAssignedByUser)  // 🔥 Revizeyi atayan kullanıcıyı dahil et
-                .Select(j => new
+                var userId = int.Parse(userIdClaim.Value);
+                var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
+                Console.WriteLine($"[DEBUG] UserId: {userId}, Role: {userRole}");
+
+                // 🔥 YENİ: Admin/Boss tüm revision işlerini, diğerleri sadece kendilerine atananları görür
+                IQueryable<Job> query = _context.Jobs
+                    .Where(j => j.Status == "Revision");
+
+                if (userRole != "Admin" && userRole != "Boss")
+                {
+                    query = query.Where(j => j.AssignedUserId == userId);
+                }
+
+                var jobs = await query
+                    .Include(j => j.RevisionAssignedByUser)
+                    .ToListAsync();
+
+                Console.WriteLine($"[DEBUG] Bulunan iş sayısı: {jobs.Count}");
+
+                var result = jobs.Select(j => new
                 {
                     j.Id,
                     j.Title,
@@ -243,19 +263,42 @@ namespace FiberJobManager.Api.Controllers
                     j.Status,
                     j.RevisionReason,
                     j.RevisionDate,
+                    j.RevisionDueDate,
                     RevisionAssignedByName = j.RevisionAssignedByUser != null
-                        ? j.RevisionAssignedByUser.Name
-                        : "Bilinmiyor",  // 🔥 Revizeyi atayan kişinin adı
+                        ? $"{j.RevisionAssignedByUser.Name} {j.RevisionAssignedByUser.UserSurname}"
+                        : "Bilinmiyor",
                     FieldStatus = _context.JobFieldReports
                         .Where(r => r.JobId == j.Id)
                         .OrderByDescending(r => r.CreatedAt)
                         .Select(r => r.FieldStatus)
-                        .FirstOrDefault()
-                })
-                .ToListAsync();
+                        .FirstOrDefault(),
+                    RevisionCount = _context.JobRevisionHistories
+                        .Count(h => h.JobId == j.Id),
+                    RevisionHistory = _context.JobRevisionHistories
+                        .Where(h => h.JobId == j.Id)
+                        .OrderByDescending(h => h.RevisionDate)
+                        .Select(h => new
+                        {
+                            h.AssignedByName,
+                            h.RevisionReason,
+                            h.RevisionDate,
+                            h.CompletedDate,
+                            h.Status
+                        })
+                        .ToList()
+                }).ToList();
 
-            return Ok(jobs);
+                Console.WriteLine($"[DEBUG] Result count: {result.Count}");
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] {ex.Message}");
+                return StatusCode(500, new { error = ex.Message });
+            }
         }
+
 
 
         // GET: api/jobs/{jobId}/revision-note
@@ -320,7 +363,8 @@ namespace FiberJobManager.Api.Controllers
             job.Status = "Revision";
             job.RevisionReason = dto.RevisionReason;
             job.RevisionDate = turkeyTime;
-            job.RevisionAssignedBy = userId;  // 🔥 Kim revizeye aldı
+            job.RevisionAssignedBy = userId;  //  Kim revizeye aldı
+            job.RevisionDueDate = dto.RevisionDueDate; // Revize bitiş tarihi
 
             await _context.SaveChangesAsync();
 

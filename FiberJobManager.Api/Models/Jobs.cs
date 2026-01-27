@@ -28,5 +28,7 @@ namespace FiberJobManager.Api.Models
         [ForeignKey("RevisionAssignedBy")]  
         public User? RevisionAssignedByUser { get; set; }  // Navigation property
 
+        //Revizyonun tamamlanması gereken tarih
+        public DateTime? RevisionDueDate { get; set; }
     }
 }

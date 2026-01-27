@@ -62,6 +62,9 @@ namespace FiberJobManager.Desktop.Models
 
         [JsonPropertyName("revisionHistory")]
         public List<RevisionHistoryItem> RevisionHistory { get; set; }
+
+        [JsonPropertyName("revisionDueDate")]
+        public DateTime? RevisionDueDate { get; set; }
     }
 
     public class RevisionHistoryItem
@@ -80,5 +83,7 @@ namespace FiberJobManager.Desktop.Models
 
         [JsonPropertyName("status")]
         public string Status { get; set; }
+
+        
     }
 }
