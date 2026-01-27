@@ -14,6 +14,8 @@ namespace FiberJobManager.Desktop
         public static string UserSurname{ get; set; }
         public static string Role { get; set; }
         public static string Email { get; set; }
+
+        public static string Token { get; set; }    
     }
 }
 
