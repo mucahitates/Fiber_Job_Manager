@@ -54,6 +54,12 @@ namespace FiberJobManager.Desktop
             }
         }
 
+        // Window aktif olduğunda sayaçları yenile
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            LoadJobCounts();
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (Settings.Role?.ToLower() != "boss")

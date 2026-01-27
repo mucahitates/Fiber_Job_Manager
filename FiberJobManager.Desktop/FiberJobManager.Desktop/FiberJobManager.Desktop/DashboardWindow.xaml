@@ -5,7 +5,8 @@
         Height="750"
         Width="900"
         Background="#F3F4F6"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize"
+        Activated="Window_Activated">
     
 
     <!-- ⭐ BUTON STYLE (ortak) -->

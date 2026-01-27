@@ -206,7 +206,7 @@ namespace FiberJobManager.Api.Controllers
                         .OrderByDescending(r => r.CreatedAt)
                         .Select(r => r.FieldStatus)
                         .FirstOrDefault(),
-                    // Tamamlanma tarihi (FieldStatus = 2 olan en son rapor)
+                    // (FieldStatus = 2 olan en son rapor)
                     CompletedDate = _context.JobFieldReports
                         .Where(r => r.JobId == j.Id && r.FieldStatus == 2)
                         .OrderByDescending(r => r.CreatedAt)
