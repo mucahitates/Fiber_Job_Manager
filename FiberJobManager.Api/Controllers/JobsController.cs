@@ -176,6 +176,35 @@ namespace FiberJobManager.Api.Controllers
             return Ok(jobs);
         }
 
+        // GET: api/jobs/completed
+        // Tamamlanmış işleri listeler
+        [HttpGet("completed")]
+        public async Task<IActionResult> GetCompletedJobs()
+        {
+            var jobs = await _context.Jobs
+                .Where(j => j.Status == "Completed")
+                .Select(j => new
+                {
+                    j.Id,
+                    j.Title,
+                    j.Description,
+                    j.Firma,
+                    j.Region,
+                    j.HK,
+                    j.SM,
+                    j.NVT,
+                    j.FirstMeasurement,
+                    j.Status,
+                    FieldStatus = _context.JobFieldReports
+                        .Where(r => r.JobId == j.Id)
+                        .OrderByDescending(r => r.CreatedAt)
+                        .Select(r => r.FieldStatus)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+
+            return Ok(jobs);
+        }
 
 
     }
