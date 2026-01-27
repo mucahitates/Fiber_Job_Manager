@@ -129,7 +129,7 @@ namespace FiberJobManager.Desktop.Views
                 // Detaylı hata mesajı göster
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("Saha notu kaydedildi.");
+                    MessageBox.Show("Not kaydedildi.");
                     NotePopup.IsOpen = false;
                     _activeJob = null;
 

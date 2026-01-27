@@ -79,7 +79,7 @@
                     </DataGrid.Resources>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Proje Id" Binding="{Binding Id}" Width="0.8*">
+                        <DataGridTextColumn Header="Proje Id" Binding="{Binding Id}" Width="0.8*" FontSize="16">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -88,7 +88,11 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Header="Firma" Binding="{Binding Firma}" Width="1.8*">
+                        <DataGridTextColumn Header="Firma" 
+                                            Binding="{Binding Firma}" 
+                                            FontWeight="SemiBold"
+                                            Width="1.8*" 
+                                            FontSize="18">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -98,7 +102,11 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Header="Bölge" Binding="{Binding Bolge}" Width="1.3*">
+                        <DataGridTextColumn Header="Bölge" 
+                                            Binding="{Binding Bolge}" 
+                                            Width="1.1*"
+                                            FontSize="18"
+                                            FontWeight="SemiBold">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -107,7 +115,11 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Header="HK" Binding="{Binding HK}" Width="0.7*">
+                        <DataGridTextColumn Header="HK" 
+                                            Binding="{Binding HK}" 
+                                            Width="0.9*"
+                                            FontSize="18"
+                                            FontWeight="SemiBold">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -116,7 +128,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Header="SM" Binding="{Binding SM}" Width="0.7*">
+                        <DataGridTextColumn Header="SM" Binding="{Binding SM}" Width="0.9*" FontSize="18" FontWeight="SemiBold">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -125,7 +137,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Header="NVT" Binding="{Binding NVT}" Width="0.9*">
+                        <DataGridTextColumn Header="NVT" Binding="{Binding NVT}" Width="0.9*" FontSize="18" FontWeight="SemiBold">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -134,8 +146,11 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTextColumn Header="İlk Ölçüm" Binding="{Binding FirstMeasurement, StringFormat=dd.MM.yyyy}"
- Width="1.5*">
+                        <DataGridTextColumn Header="İlk Ölçüm"
+                                            Binding="{Binding FirstMeasurement, StringFormat=dd.MM.yyyy}"
+                                            Width="1.5*"
+                                            FontSize="18"
+                                            FontWeight="SemiBold">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -143,7 +158,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        
+
                         <!-- Proje Durumu (ComboBox + Durum Göstergesi) -->
                         <DataGridTemplateColumn Header="Proje Durumu" Width="180">
                             <DataGridTemplateColumn.CellTemplate>
@@ -251,7 +266,7 @@
                                  Height="35"
                                  BorderThickness="0"
                                  Click="BtnSaveNote_Click"
-                                  />  
+                                  />
                             </UniformGrid>
                         </StackPanel>
                     </Border>
