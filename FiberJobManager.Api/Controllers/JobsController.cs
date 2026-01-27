@@ -179,12 +179,16 @@ namespace FiberJobManager.Api.Controllers
         }
 
         // GET: api/jobs/completed
-        // Tamamlanmış işleri listeler
+        // Kullanıcıya ait tamamlanmış işleri listeler
         [HttpGet("completed")]
         public async Task<IActionResult> GetCompletedJobs()
         {
+            // 🔥 Token'dan userId al
+            var userId = int.Parse(User.FindFirst("userId").Value);
+
+            // 🔥 Sadece bu kullanıcıya atanmış VE Completed olan işleri çek
             var jobs = await _context.Jobs
-                .Where(j => j.Status == "Completed")
+                .Where(j => j.AssignedUserId == userId && j.Status == "Completed")
                 .Select(j => new
                 {
                     j.Id,
@@ -202,7 +206,7 @@ namespace FiberJobManager.Api.Controllers
                         .OrderByDescending(r => r.CreatedAt)
                         .Select(r => r.FieldStatus)
                         .FirstOrDefault(),
-
+                    // Tamamlanma tarihi (FieldStatus = 2 olan en son rapor)
                     CompletedDate = _context.JobFieldReports
                         .Where(r => r.JobId == j.Id && r.FieldStatus == 2)
                         .OrderByDescending(r => r.CreatedAt)
@@ -213,7 +217,6 @@ namespace FiberJobManager.Api.Controllers
 
             return Ok(jobs);
         }
-
         // GET: api/jobs/my-revision
         // Kullanıcıya atanmış revize bekleyen işleri listeler
         [HttpGet("my-revision")]

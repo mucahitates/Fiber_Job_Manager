@@ -133,14 +133,15 @@
                        IsHitTestVisible="False"/>
 
                             <PasswordBox x:Name="txtPassword"
-                         BorderThickness="0"
-                         Background="Transparent"
-                         Foreground="#4B5563"
-                         CaretBrush="#4b5563"
-                         FontSize="13"
-                         VerticalContentAlignment="Center"
-                         GotFocus="txtPassword_GotFocus"
-                         LostFocus="txtPassword_LostFocus"/>
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     Foreground="#4B5563"
+                                     CaretBrush="#4b5563"
+                                     FontSize="13"
+                                     VerticalContentAlignment="Center"
+                                     GotFocus="txtPassword_GotFocus"
+                                     LostFocus="txtPassword_LostFocus"
+                                     KeyDown="TxtPassword_KeyDown"/>
 
                             <!-- Şifreyi düz yazı olarak göstereceğimiz TextBox -->
                             <TextBox x:Name="txtPasswordVisible"

@@ -198,6 +198,15 @@ namespace FiberJobManager.Desktop
 
         }
 
+        // Enter tuşuna basınca giriş yap
+        private void TxtPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Login_Click(sender, e);
+            }
+        }
+
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
