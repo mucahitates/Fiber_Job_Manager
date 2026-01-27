@@ -143,18 +143,55 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-
-                        <DataGridTemplateColumn Header="Proje Durumu" Width="1.6*">
+                        
+                        <!-- Proje Durumu (ComboBox + Durum Göstergesi) -->
+                        <DataGridTemplateColumn Header="Proje Durumu" Width="180">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox Height="32" Margin="4,2" VerticalContentAlignment="Center">
-                                        <ComboBoxItem Content="İşlem yapılmadı" Tag="0"/>
-                                        <ComboBoxItem Content="İşlem yapılamıyor" Tag="1"/>
-                                        <ComboBoxItem Content="İşlem tamamlandı" Tag="2"/>
-                                    </ComboBox>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <!-- Renkli Durum Dairesi -->
+                                        <Ellipse Width="12" Height="12" 
+                         Stroke="Gray" StrokeThickness="1"
+                         Margin="5,0,8,0"
+                         VerticalAlignment="Center">
+                                            <Ellipse.Style>
+                                                <Style TargetType="Ellipse">
+                                                    <!-- Varsayılan: Gri -->
+                                                    <Setter Property="Fill" Value="Gray"/>
+
+                                                    <!-- 0 = Sarı (Yapılmadı) -->
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding FieldStatus}" Value="0">
+                                                            <Setter Property="Fill" Value="Gold"/>
+                                                        </DataTrigger>
+
+                                                        <!-- 1 = Kırmızı (Yapılamıyor) -->
+                                                        <DataTrigger Binding="{Binding FieldStatus}" Value="1">
+                                                            <Setter Property="Fill" Value="Red"/>
+                                                        </DataTrigger>
+
+                                                        <!-- 2 = Yeşil (Tamamlandı) -->
+                                                        <DataTrigger Binding="{Binding FieldStatus}" Value="2">
+                                                            <Setter Property="Fill" Value="LimeGreen"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Ellipse.Style>
+                                        </Ellipse>
+
+                                        <!-- ComboBox -->
+                                        <ComboBox SelectedValue="{Binding FieldStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedValuePath="Tag"
+                          Width="130">
+                                            <ComboBoxItem Content="Yapılmadı" Tag="0" />
+                                            <ComboBoxItem Content="Yapılamıyor" Tag="1" />
+                                            <ComboBoxItem Content="Tamamlandı" Tag="2" />
+                                        </ComboBox>
+                                    </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
 
                         <DataGridTemplateColumn Header="Detay" Width="0.6*">
                             <DataGridTemplateColumn.CellTemplate>

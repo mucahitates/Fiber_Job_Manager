@@ -239,7 +239,7 @@
                                    TextWrapping="Wrap"/>
                     </Button>
 
-                    <Button Style="{StaticResource DashboardButton}">
+                    <Button Style="{StaticResource DashboardButton}" Click="Button_Click_5">
                         <TextBlock Text="Tamamlanan Projeler"
                                    FontSize="18"
                                    FontWeight="Bold"

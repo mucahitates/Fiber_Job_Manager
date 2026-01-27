@@ -121,6 +121,9 @@
     <Compile Include="Models\PersonModel.cs" />
     <Compile Include="Models\TempDocument.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Views\CompletedJobsWindow.xaml.cs">
+      <DependentUpon>CompletedJobsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LinksWindow.xaml.cs">
       <DependentUpon>LinksWindow.xaml</DependentUpon>
     </Compile>
@@ -150,6 +153,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\CompletedJobsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LinksWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

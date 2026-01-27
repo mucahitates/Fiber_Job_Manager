@@ -144,15 +144,34 @@ namespace FiberJobManager.Api.Controllers
 
 
         [HttpGet("my-new")]
-        public IActionResult GetMyNewJobs()
+        public async Task<IActionResult> GetMyNewJobs()
         {
-            // Token içinden userId'yi alıyoruz
+            // Token'dan userId al
             var userId = int.Parse(User.FindFirst("userId").Value);
 
-            // Sadece bu kullanıcıya atanmış ve NEW olan işleri çekiyoruz
-            var jobs = _context.Jobs
-             .Where(j => j.AssignedUserId == userId)
-             .ToList();
+            // Kullanıcıya atanmış işleri çek
+            var jobs = await _context.Jobs
+                .Where(j => j.AssignedUserId == userId)
+                .Select(j => new
+                {
+                    j.Id,
+                    j.Title,
+                    j.Description,
+                    j.Firma,
+                    j.Region,
+                    j.HK,
+                    j.SM,
+                    j.NVT,
+                    j.FirstMeasurement,
+                    j.Status,
+                    // 🔥 YENİ: En son field report'tan FieldStatus'u al
+                    FieldStatus = _context.JobFieldReports
+                        .Where(r => r.JobId == j.Id)
+                        .OrderByDescending(r => r.CreatedAt)
+                        .Select(r => r.FieldStatus)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
 
             return Ok(jobs);
         }
