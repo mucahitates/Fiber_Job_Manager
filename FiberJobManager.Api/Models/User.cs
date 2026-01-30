@@ -12,5 +12,6 @@
 
         // Misafir kullanıcılar için firma bilgisi
         public string? Company { get; set; }  // Örn: "Quick City", "Berasco"
+        public string? Region { get; set; } // Çalışılan bölge
     }
 }

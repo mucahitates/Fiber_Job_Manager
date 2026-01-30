@@ -88,7 +88,7 @@
                         <DataGridTextColumn Header="Firma" 
                                             Binding="{Binding Firma}" 
                                             FontWeight="SemiBold"
-                                            Width="1.8*" 
+                                            Width="1.4*" 
                                             FontSize="16">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
@@ -101,7 +101,7 @@
 
                         <DataGridTextColumn Header="Bölge" 
                                             Binding="{Binding Bolge}" 
-                                            Width="1.1*"
+                                            Width="1.6*"
                                             FontSize="16"
                                             FontWeight="SemiBold">
                             <DataGridTextColumn.ElementStyle>

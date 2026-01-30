@@ -102,7 +102,7 @@
 
                         <DataGridTextColumn Header="Bölge" 
                                             Binding="{Binding Bolge}" 
-                                            Width="1*"
+                                            Width="1.7*"
                                             FontSize="16"
                                             FontWeight="SemiBold">
                             <DataGridTextColumn.ElementStyle>

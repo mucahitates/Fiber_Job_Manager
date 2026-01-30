@@ -285,7 +285,7 @@
                                    TextAlignment="Center"
                                    TextWrapping="Wrap"/>
                     </Button>
-
+                    
                 </UniformGrid>
 
                 <!-- ℹ️ ALT VERSİYON -->
