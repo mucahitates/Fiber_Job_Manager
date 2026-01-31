@@ -179,29 +179,3 @@ namespace FiberJobManager.Desktop.Views
     }
 }
 
-// ============================================================
-// NewJobWindow.xaml.cs - DETAY BUTONUNDAN ÇAĞIRMA ÖRNEĞİ
-// ============================================================
-/*
-// DataGrid'deki Detay butonuna tıklanınca:
-private void BtnDetay_Click(object sender, RoutedEventArgs e)
-{
-    var button = sender as Button;
-    var job = button?.DataContext as JobViewModel; // Veya kendi modeliniz
-
-    if (job != null)
-    {
-        // DetailJobWindow'u aç ve bilgileri gönder
-        var detailWindow = new DetailJobWindow(
-            jobId: job.ProjeId,      // 376
-            hk: job.HK,              // "HK-N-01"
-            nvt: job.NVT,            // 8001
-            sm: job.SM               // "Quick-City"
-        );
-
-        detailWindow.ShowDialog(); // Modal olarak aç
-        // VEYA
-        // detailWindow.Show(); // Modal olmadan aç
-    }
-}
-*/
