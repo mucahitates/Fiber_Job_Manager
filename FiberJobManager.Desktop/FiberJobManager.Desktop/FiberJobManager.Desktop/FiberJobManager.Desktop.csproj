@@ -127,6 +127,9 @@
     <Compile Include="Views\CompletedJobsWindow.xaml.cs">
       <DependentUpon>CompletedJobsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\JobDetailWindow.xaml.cs">
+      <DependentUpon>JobDetailWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LinksWindow.xaml.cs">
       <DependentUpon>LinksWindow.xaml</DependentUpon>
     </Compile>
@@ -163,6 +166,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\CompletedJobsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JobDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

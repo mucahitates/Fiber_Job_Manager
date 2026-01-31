@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using FiberJobManager.Desktop.Models;
 using System.Net.Http;
+using FiberJobManager.Desktop.Views;
 
 namespace FiberJobManager.Desktop.Views
 {
@@ -49,42 +50,15 @@ namespace FiberJobManager.Desktop.Views
         }
 
 
-        // 📝 Detay Butonu - Not popup'ını açar
+        // 📝 Detay Butonu 
         private async void BtnOpenNote_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            if (button?.DataContext is JobRowModel clickedJob)
+            if (button?.DataContext is JobRowModel job)
             {
-                _activeJob = clickedJob;
-
-                // Notu API'den çek
-                try
-                {
-                    var url = $"/api/jobs/{_activeJob.Id}/field-report";
-                    var response = await App.ApiClient.GetAsync(url);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var json = await response.Content.ReadAsStringAsync();
-
-                        // JSON'u JobFieldReport objesine parse et
-                        var report = JsonSerializer.Deserialize<JobFieldReportModel>(json,
-                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                        TxtProjectNote.Text = report?.Note ?? "";
-                    }
-                    else
-                    {
-                        TxtProjectNote.Text = "";
-                    }
-                }
-                catch
-                {
-                    TxtProjectNote.Text = "";
-                }
-
-                NotePopup.IsOpen = true;
-                TxtProjectNote.Focus();
+                // JobDetailWindow'u aç
+                var detailWindow = new JobDetailWindow(job.Id);
+                detailWindow.Show();
             }
         }
 
