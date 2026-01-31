@@ -1,0 +1,189 @@
+﻿<UserControl x:Class="FiberJobManager.Desktop.Views.PhotosDocumentNotePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+        <!-- Canvas overlay için büyük fotoğraf -->
+        <Canvas x:Name="OverlayCanvas" Panel.ZIndex="100" Visibility="Collapsed">
+            <Border x:Name="BigPhotoOverlay"
+                    Width="800"
+                    Height="1000"
+                    Background="White"
+                    CornerRadius="16"
+                    BorderBrush="#1E293B"
+                    BorderThickness="2"
+                    Padding="10">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="30" ShadowDepth="0"/>
+                </Border.Effect>
+                <Image x:Name="BigPhotoImage" Stretch="Uniform"/>
+            </Border>
+        </Canvas>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Başlık -->
+                <TextBlock Text="📸 FOTOĞRAFLAR, BELGELER &amp; NOTLAR"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="#1E293B"
+                           Margin="0,0,0,30"/>
+
+                <!-- Fotoğraflar Bölümü -->
+                <TextBlock Text="Fotoğraflar (5)"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="#334155"
+                           Margin="0,0,0,15"/>
+
+                <WrapPanel x:Name="PhotoGrid">
+
+                    <!-- Örnek Fotoğraf 1 -->
+                    <Border Width="70"
+                            Height="60"
+                            Background="#F1F5F9"
+                            CornerRadius="12"
+                            Margin="0,0,15,15"
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1"
+                            Cursor="Hand"
+                            MouseEnter="Photo_MouseEnter"
+                            MouseLeave="Photo_MouseLeave"
+                            MouseDown="Photo_MouseDown"
+                            Tag="foto1.jpg">
+                        <Grid>
+                            <Rectangle Fill="#94A3B8" RadiusX="12" RadiusY="12"/>
+                            <TextBlock Text="📸" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Border Background="#000000" 
+                                    Opacity="0.6"
+                                    CornerRadius="0,0,12,12"
+                                    VerticalAlignment="Bottom"
+                                    Height="30">
+                                <TextBlock Text="Foto_001.jpg"
+                                           Foreground="White"
+                                           FontSize="10"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- Örnek Fotoğraf 2 -->
+                    <Border Width="70"
+                            Height="60"
+                            Background="#F1F5F9"
+                            CornerRadius="12"
+                            Margin="0,0,15,15"
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1"
+                            Cursor="Hand"
+                            MouseEnter="Photo_MouseEnter"
+                            MouseLeave="Photo_MouseLeave"
+                            MouseDown="Photo_MouseDown"
+                            Tag="foto2.jpg">
+                        <Grid>
+                            <Rectangle Fill="#94A3B8" RadiusX="12" RadiusY="12"/>
+                            <TextBlock Text="📸" FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Border Background="#000000" 
+                                    Opacity="0.6"
+                                    CornerRadius="0,0,12,12"
+                                    VerticalAlignment="Bottom"
+                                    Height="30">
+                                <TextBlock Text="Foto_002.jpg"
+                                           Foreground="White"
+                                           FontSize="10"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- Daha fazla fotoğraf API'den eklenecek -->
+                </WrapPanel>
+
+                <!-- PDF Belgeler Bölümü -->
+                <TextBlock Text="PDF Belgeler (3)"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="#334155"
+                           Margin="0,30,0,15"/>
+
+                <StackPanel x:Name="PDFList">
+
+                    <!-- Örnek PDF (HOVER YOK, SADECE İNDİR) -->
+                    <Border Background="#F8FAFC"
+                            CornerRadius="10"
+                            Padding="15"
+                            Margin="0,0,0,10"
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" 
+                                       Text="📄" 
+                                       FontSize="32"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,15,0"/>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Olcum_Raporu.pdf"
+                                           FontWeight="SemiBold"
+                                           FontSize="14"
+                                           Foreground="#1E293B"/>
+                                <TextBlock Text="2.3 MB • 31.01.2026"
+                                           FontSize="12"
+                                           Foreground="#64748B"
+                                           Margin="0,3,0,0"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="2"
+                                    Content="⬇️"
+                                    Width="40"
+                                    Height="40"
+                                    FontSize="18"
+                                    Background="#3B82F6"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    Click="PDFDownload_Click">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                </StackPanel>
+
+                <!-- Notlar Bölümü -->
+                <TextBlock Text="Notlar"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="#334155"
+                           Margin="0,30,0,15"/>
+
+                <Border Background="#F8FAFC"
+                        CornerRadius="12"
+                        Padding="20"
+                        BorderBrush="#E2E8F0"
+                        BorderThickness="1">
+                    <TextBlock x:Name="TxtNotes"
+                               Text="Henüz not eklenmemiş"
+                               FontSize="14"
+                               Foreground="#64748B"
+                               TextWrapping="Wrap"/>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -1,0 +1,206 @@
+﻿<UserControl x:Class="FiberJobManager.Desktop.Views.AudioNotesPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="450"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===================== -->
+        <!-- SOL : SESLİ NOTLAR -->
+        <!-- ===================== -->
+        <Border Grid.Column="0"
+                Background="White"
+                CornerRadius="12"
+                Padding="20"
+                Margin="0,0,15,0"
+                BorderBrush="#E2E8F0"
+                BorderThickness="1">
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+
+                    <!-- BAŞLIK -->
+                    <Border Background="#3B82F6"
+                            CornerRadius="8"
+                            Padding="10"
+                            Margin="0,0,0,20">
+                        <TextBlock Text="🎤  SESLİ NOTLAR"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="White"/>
+                    </Border>
+
+                    <!-- ===================== -->
+                    <!-- SES NOTU 1 -->
+                    <!-- ===================== -->
+                    <Border x:Name="Card1"
+                            Background="#F8FAFC"
+                            CornerRadius="10"
+                            Padding="10"
+                            Height="56"
+                            Margin="0,0,0,10"
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1">
+
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- MİKROFON = PLAY / STOP -->
+                            <Button Width="34"
+                                    Height="34"
+                                    Margin="0,0,10,0"
+                                    Background="#3B82F6"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    FontSize="14"
+                                    Content="🎤"
+                                    Tag="0"
+                                    Click="PlayButton_Click"
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="17">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <!-- METİN -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Ses Notu 1"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="#1E293B"/>
+                                <TextBlock Text="2:34 • 31.01.2026"
+                                           FontSize="10"
+                                           Foreground="#64748B"/>
+                            </StackPanel>
+
+                            <!-- SLIDER -->
+                            <Slider Grid.Column="2"
+                                    Width="110"
+                                    Height="20"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ===================== -->
+                    <!-- SES NOTU 2 -->
+                    <!-- ===================== -->
+                    <Border x:Name="Card2"
+                            Background="#F8FAFC"
+                            CornerRadius="10"
+                            Padding="10"
+                            Height="56"
+                            Margin="0,0,0,10"
+                            BorderBrush="#CBD5E1"
+                            BorderThickness="1">
+
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Width="34"
+                                    Height="34"
+                                    Margin="0,0,10,0"
+                                    Background="#6366F1"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    FontSize="14"
+                                    Content="🎤"
+                                    Tag="1"
+                                    Click="PlayButton_Click"
+                                    Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="17">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Ses Notu 2"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="#1E293B"/>
+                                <TextBlock Text="1:12 • 31.01.2026"
+                                           FontSize="10"
+                                           Foreground="#64748B"/>
+                            </StackPanel>
+
+                            <Slider Grid.Column="2"
+                                    Width="110"
+                                    Height="20"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- ===================== -->
+        <!-- SAĞ : NOTLAR -->
+        <!-- ===================== -->
+        <Border Grid.Column="1"
+                Background="#FFFEF5"
+                CornerRadius="12"
+                Padding="20"
+                BorderBrush="#FCD34D"
+                BorderThickness="2">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,0,0,10">
+                    <TextBlock Text="📝 NOTLARIM"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="#92400E"/>
+                    <TextBlock Text="Ses kayıtlarından çıkardığınız notları buraya yazın"
+                               FontSize="11"
+                               Foreground="#78716C"/>
+                </StackPanel>
+
+                <TextBox x:Name="TxtNotes"
+                         Grid.Row="1"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         Padding="10"
+                         FontSize="14"
+                         TextChanged="TxtNotes_TextChanged"/>
+
+                <TextBlock x:Name="TxtSaveStatus"
+                           Grid.Row="2"
+                           Text="✅ Otomatik kaydedildi"
+                           FontSize="11"
+                           Foreground="#059669"
+                           HorizontalAlignment="Right"
+                           Margin="0,10,0,0"/>
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>

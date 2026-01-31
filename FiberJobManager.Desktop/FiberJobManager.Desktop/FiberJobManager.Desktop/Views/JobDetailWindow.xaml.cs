@@ -50,24 +50,12 @@ namespace FiberJobManager.Desktop.Views
 
         private void ShowPhotosContent()
         {
-            ContentArea.Content = new TextBlock
-            {
-                Text = $"📸 FOTOĞRAFLAR / BELGELER\n\nİş ID: {_jobId}",
-                FontSize = 24,
-                FontWeight = FontWeights.Bold,
-                Foreground = new SolidColorBrush(Color.FromRgb(15, 23, 42))
-            };
+            ContentArea.Content = new PhotosDocumentNotePanel(_jobId);
         }
 
         private void ShowAudioContent()
         {
-            ContentArea.Content = new TextBlock
-            {
-                Text = $"🎤 SESLİ NOTLAR\n\nİş ID: {_jobId}",
-                FontSize = 24,
-                FontWeight = FontWeights.Bold,
-                Foreground = new SolidColorBrush(Color.FromRgb(15, 23, 42))
-            };
+            ContentArea.Content = new AudioNotesPanel(_jobId);
         }
 
         private void ShowRevisionContent()
