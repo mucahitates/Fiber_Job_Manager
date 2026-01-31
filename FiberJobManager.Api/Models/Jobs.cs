@@ -11,9 +11,6 @@ namespace FiberJobManager.Api.Models
         public string Status { get; set; } = "Pending";
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        
-        public string Firma { get; set; } // firma
-        public string Region { get; set; } // Bölge
         public string HK { get; set; } //Hk
         public string SM { get; set; } // Sm
         public string NVT { get; set; }  // HK/NVT veya NVT

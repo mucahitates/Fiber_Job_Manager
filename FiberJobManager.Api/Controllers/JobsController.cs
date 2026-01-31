@@ -152,28 +152,29 @@ namespace FiberJobManager.Api.Controllers
 
             // 🔥 YENİ: Hem Completed hem Revision'ı hariç tut
             var jobs = await _context.Jobs
-                .Where(j => j.AssignedUserId == userId
-                         && j.Status != "Completed"
-                         && j.Status != "Revision")  // ← Bu satırı ekle
-                .Select(j => new
-                {
-                    j.Id,
-                    j.Title,
-                    j.Description,
-                    j.Firma,
-                    j.Region,
-                    j.HK,
-                    j.SM,
-                    j.NVT,
-                    j.FirstMeasurement,
-                    j.Status,
-                    // En son field report'tan FieldStatus'u al
-                    FieldStatus = _context.JobFieldReports
-                        .Where(r => r.JobId == j.Id)
-                        .OrderByDescending(r => r.CreatedAt)
-                        .Select(r => r.FieldStatus)
-                        .FirstOrDefault()
-                })
+             .Where(j => j.AssignedUserId == userId
+                      && j.Status != "Completed"
+                      && j.Status != "Revision")
+             .Include(j => j.Company_Nav)   // ← YENİ
+             .Include(j => j.Region_Nav)    // ← YENİ
+             .Select(j => new
+             {
+                 j.Id,
+                 j.Title,
+                 j.Description,
+                 Firma = j.Company_Nav != null ? j.Company_Nav.CompanyName : null,   
+                 Region = j.Region_Nav != null ? j.Region_Nav.RegionName : null,    
+                 j.HK,
+                 j.SM,
+                 j.NVT,
+                 j.FirstMeasurement,
+                 j.Status,
+                 FieldStatus = _context.JobFieldReports
+                     .Where(r => r.JobId == j.Id)
+                     .OrderByDescending(r => r.CreatedAt)
+                     .Select(r => r.FieldStatus)
+                     .FirstOrDefault()
+             })
                 .ToListAsync();
 
             return Ok(jobs);
@@ -190,13 +191,15 @@ namespace FiberJobManager.Api.Controllers
             // 🔥 Sadece bu kullanıcıya atanmış VE Completed olan işleri çek
             var jobs = await _context.Jobs
                 .Where(j => j.AssignedUserId == userId && j.Status == "Completed")
+                .Include(j => j.Company_Nav)
+                .Include(j => j.Region_Nav)
                 .Select(j => new
                 {
                     j.Id,
                     j.Title,
                     j.Description,
-                    j.Firma,
-                    j.Region,
+                    Firma = j.Company_Nav != null ? j.Company_Nav.CompanyName : null,
+                    Region = j.Region_Nav != null ? j.Region_Nav.RegionName : null,
                     j.HK,
                     j.SM,
                     j.NVT,
@@ -207,7 +210,6 @@ namespace FiberJobManager.Api.Controllers
                         .OrderByDescending(r => r.CreatedAt)
                         .Select(r => r.FieldStatus)
                         .FirstOrDefault(),
-                    // (FieldStatus = 2 olan en son rapor)
                     CompletedDate = _context.JobFieldReports
                         .Where(r => r.JobId == j.Id && r.FieldStatus == 2)
                         .OrderByDescending(r => r.CreatedAt)
@@ -243,8 +245,11 @@ namespace FiberJobManager.Api.Controllers
                     query = query.Where(j => j.AssignedUserId == userId);
                 }
 
+                // Query kısmı aynı kalacak, sadece Select'i değiştir:
                 var jobs = await query
                     .Include(j => j.RevisionAssignedByUser)
+                    .Include(j => j.Company_Nav)       
+                    .Include(j => j.Region_Nav)         
                     .ToListAsync();
 
                 Console.WriteLine($"[DEBUG] Bulunan iş sayısı: {jobs.Count}");
@@ -254,8 +259,8 @@ namespace FiberJobManager.Api.Controllers
                     j.Id,
                     j.Title,
                     j.Description,
-                    j.Firma,
-                    j.Region,
+                    Firma = j.Company_Nav?.CompanyName,      
+                    Region = j.Region_Nav?.RegionName,       
                     j.HK,
                     j.SM,
                     j.NVT,
@@ -287,6 +292,8 @@ namespace FiberJobManager.Api.Controllers
                         })
                         .ToList()
                 }).ToList();
+
+
 
                 Console.WriteLine($"[DEBUG] Result count: {result.Count}");
 
@@ -325,35 +332,32 @@ namespace FiberJobManager.Api.Controllers
             return Ok(response);
         }
 
-        
+
         // PUT: api/jobs/{jobId}/set-revision
         // Admin veya misafir kullanıcı bir işi revizeye alır
         [Authorize]
         [HttpPut("{jobId}/set-revision")]
         public async Task<IActionResult> SetJobRevision(int jobId, [FromBody] SetRevision dto)
         {
-            var job = await _context.Jobs.FindAsync(jobId);
+            var job = await _context.Jobs
+             .Include(j => j.Company_Nav)    // ← YENİ
+             .FirstOrDefaultAsync(j => j.Id == jobId);
+
             if (job == null)
                 return NotFound("İş kaydı bulunamadı");
 
-            // Giriş yapan kullanıcı
             var userId = int.Parse(User.FindFirst("userId").Value);
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _context.Users
+                .Include(u => u.Company_Nav)    // ← YENİ
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
                 return Unauthorized("Kullanıcı bulunamadı");
 
-            // 🔥 YENİ: Misafir kullanıcı kontrolü
-            // Misafir kullanıcı sadece kendi firmasındaki işleri revizeye alabilir
-            if (user.Role == "Guest" && job.Firma != user.Company)
+            // 🔥 YENİ: Misafir kullanıcı kontrolü (CompanyId ile)
+            if (user.Role == "Guest" && job.CompanyId != user.CompanyId)
             {
                 return Forbid("Sadece kendi firmanıza ait işleri revizeye alabilirsiniz!");
-            }
-
-            // Admin ve Boss her şeyi yapabilir
-            if (user.Role != "Admin" && user.Role != "Boss" && user.Role != "Guest")
-            {
-                return Forbid("Revize atama yetkiniz yok!");
             }
 
             // Türkiye saati

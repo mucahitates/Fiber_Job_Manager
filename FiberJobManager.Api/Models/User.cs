@@ -12,10 +12,6 @@ namespace FiberJobManager.Api.Models
         public string UserSurname { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Misafir kullanıcılar için firma bilgisi
-        public string? Company { get; set; }  // Örn: "Quick City", "Berasco"
-        public string? Region { get; set; } // Çalışılan bölge
-
         public int? CompanyId { get; set; }
         public int? RegionId { get; set; }
 
