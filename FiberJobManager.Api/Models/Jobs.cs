@@ -30,5 +30,9 @@ namespace FiberJobManager.Api.Models
 
         //Revizyonun tamamlanması gereken tarih
         public DateTime? RevisionDueDate { get; set; }
+
+        public int? RegionManager { get; set; }// Bölgenin Sahadaki Sorumlusu
+        [ForeignKey("RegionManager")]
+        public User? RegionManagerUser { get; set; }
     }
 }

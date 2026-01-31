@@ -16,8 +16,6 @@ namespace FiberJobManager.Api.Models
         public string? Company { get; set; }  // Örn: "Quick City", "Berasco"
         public string? Region { get; set; } // Çalışılan bölge
         
-        public int? RegionManager { get; set; }// Bölgenin Sahadaki Sorumlusu
-        [ForeignKey("RegionManager")]
-        public User? RegionManagerUser{ get; set; }
+       
     }
 }
