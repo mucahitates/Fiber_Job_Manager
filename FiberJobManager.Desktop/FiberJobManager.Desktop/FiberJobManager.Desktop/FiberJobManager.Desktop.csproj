@@ -133,6 +133,9 @@
     <Compile Include="Views\NewJobsWindow.xaml.cs">
       <DependentUpon>NewJobsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ProjectDetailWindow.xaml.cs">
+      <DependentUpon>ProjectDetailWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RevisionJobsWindow.xaml.cs">
       <DependentUpon>RevisionJobsWindow.xaml</DependentUpon>
     </Compile>
@@ -168,6 +171,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewJobsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProjectDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

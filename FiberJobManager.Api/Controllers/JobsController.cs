@@ -210,7 +210,7 @@ namespace FiberJobManager.Api.Controllers
                         .OrderByDescending(r => r.CreatedAt)
                         .Select(r => r.FieldStatus)
                         .FirstOrDefault(),
-                    CompletedDate = _context.JobFieldReports
+                         CompletedDate = _context.JobFieldReports
                         .Where(r => r.JobId == j.Id && r.FieldStatus == 2)
                         .OrderByDescending(r => r.CreatedAt)
                         .Select(r => r.CreatedAt)
