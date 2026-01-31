@@ -28,7 +28,8 @@ namespace FiberJobManager.Api.Data
 
         public DbSet<JobRevisionHistory> JobRevisionHistories { get; set; }
 
-
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<Region> Regions { get; set; }
 
     }
 }
