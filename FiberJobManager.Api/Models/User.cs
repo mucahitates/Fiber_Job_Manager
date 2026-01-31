@@ -15,7 +15,14 @@ namespace FiberJobManager.Api.Models
         // Misafir kullanıcılar için firma bilgisi
         public string? Company { get; set; }  // Örn: "Quick City", "Berasco"
         public string? Region { get; set; } // Çalışılan bölge
-        
-       
+
+        public int? CompanyId { get; set; }
+        public int? RegionId { get; set; }
+
+        [ForeignKey("CompanyId")]
+        public Company? Company_Nav { get; set; }
+
+        [ForeignKey("RegionId")]
+        public Region? Region_Nav { get; set; }
     }
 }

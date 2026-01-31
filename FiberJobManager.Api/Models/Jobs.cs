@@ -34,5 +34,16 @@ namespace FiberJobManager.Api.Models
         public int? RegionManager { get; set; }// Bölgenin Sahadaki Sorumlusu
         [ForeignKey("RegionManager")]
         public User? RegionManagerUser { get; set; }
+
+
+        public int? CompanyId { get; set; }
+        public int? RegionId { get; set; }
+
+        // Navigation Properties
+        [ForeignKey("CompanyId")]
+        public Company? Company_Nav { get; set; }
+
+        [ForeignKey("RegionId")]
+        public Region? Region_Nav { get; set; }
     }
 }

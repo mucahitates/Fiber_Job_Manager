@@ -3,6 +3,7 @@ using System;
 using FiberJobManager.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FiberJobManager.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131004458_AddCompanyAndRegionForeignKeys")]
+    partial class AddCompanyAndRegionForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,30 +39,6 @@ namespace FiberJobManager.Api.Migrations
                     b.HasKey("CompanyId");
 
                     b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("FiberJobManager.Api.Models.CompanyRegion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("RegionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("RegionId");
-
-                    b.ToTable("CompanyRegions");
                 });
 
             modelBuilder.Entity("FiberJobManager.Api.Models.Job", b =>
@@ -375,49 +354,6 @@ namespace FiberJobManager.Api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("FiberJobManager.Api.Models.UserRegion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("RegionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RegionId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRegions");
-                });
-
-            modelBuilder.Entity("FiberJobManager.Api.Models.CompanyRegion", b =>
-                {
-                    b.HasOne("FiberJobManager.Api.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FiberJobManager.Api.Models.Region", "Region")
-                        .WithMany()
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-
-                    b.Navigation("Region");
-                });
-
             modelBuilder.Entity("FiberJobManager.Api.Models.Job", b =>
                 {
                     b.HasOne("FiberJobManager.Api.Models.Company", "Company_Nav")
@@ -477,25 +413,6 @@ namespace FiberJobManager.Api.Migrations
                     b.Navigation("Company_Nav");
 
                     b.Navigation("Region_Nav");
-                });
-
-            modelBuilder.Entity("FiberJobManager.Api.Models.UserRegion", b =>
-                {
-                    b.HasOne("FiberJobManager.Api.Models.Region", "Region")
-                        .WithMany()
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FiberJobManager.Api.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Region");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FiberJobManager.Api.Models.Company", b =>

@@ -31,5 +31,8 @@ namespace FiberJobManager.Api.Data
         public DbSet<Company> Companies { get; set; }
         public DbSet<Region> Regions { get; set; }
 
+        //ARA TABLOLAR
+        public DbSet<UserRegion> UserRegions { get; set; }
+        public DbSet<CompanyRegion> CompanyRegions { get; set; }
     }
 }
