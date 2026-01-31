@@ -14,7 +14,6 @@ namespace FiberJobManager.Desktop.Views
     public partial class NewJobsWindow : Window
     {
         public ObservableCollection<JobRowModel> Jobs { get; set; }
-        // Artık sadece o an üzerinde işlem yapılan işi tutmak için kullanıyoruz
         private JobRowModel _activeJob;
 
         public NewJobsWindow()
@@ -49,16 +48,41 @@ namespace FiberJobManager.Desktop.Views
             }
         }
 
-
-        // 📝 Detay Butonu 
-        private async void BtnOpenNote_Click(object sender, RoutedEventArgs e)
+        
+        // ============================================================
+        // 📝 NOT POPUP İŞLEMLERİ (Mevcut)
+        // ============================================================
+        private void BtnOpenNote_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             if (button?.DataContext is JobRowModel job)
             {
-                // JobDetailWindow'u aç
-                var detailWindow = new JobDetailWindow(job.Id);
-                detailWindow.Show();
+                try
+                {
+                    int.TryParse(job.NVT, out int nvtValue);
+
+                    // DetailJobWindow'u aç ve iş bilgilerini gönder
+                    var detailWindow = new DetailJobWindow(
+                        jobId: job.Id,           // İş ID'si
+                        hk: job.HK,     // HK bilgisi (null kontrolü)
+                        nvt: nvtValue,       // NVT bilgisi
+                        sm: job.SM       // SM bilgisi
+                    );
+
+                    // Modal olarak aç (window kapanana kadar bekler)
+                    //detailWindow.ShowDialog();
+
+                    // VEYA modal olmadan aç:
+                    detailWindow.Show();
+
+                    // Window kapatıldıktan sonra listeyi yenile (opsiyonel)
+                    LoadJobsFromApi();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Detay penceresi açılamadı:\n{ex.Message}", "Hata",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -79,11 +103,12 @@ namespace FiberJobManager.Desktop.Views
 
             string noteText = TxtProjectNote.Text.Trim();
 
-            // 🔥 YENİ: Yapılamıyor veya Tamamlandı seçiliyse NOT zorunlu
+            // Not zorunluluğu kontrolü
             if ((_activeJob.FieldStatus == 1 || _activeJob.FieldStatus == 2) && string.IsNullOrWhiteSpace(noteText))
             {
                 var statusText = _activeJob.FieldStatus == 1 ? "Yapılamıyor" : "Tamamlandı";
-                MessageBox.Show($"Durumu '{statusText}' olarak işaretlemek için not girmelisiniz!", "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show($"Durumu '{statusText}' olarak işaretlemek için not girmelisiniz!",
+                    "Uyarı", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -109,14 +134,16 @@ namespace FiberJobManager.Desktop.Views
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // 🔥 Mesaj güncelle
+                    // Başarı mesajı
                     if (_activeJob.FieldStatus == 1)
                     {
-                        MessageBox.Show("Proje 'Yapılamıyor' olarak işaretlendi ve revizeye alındı!", "Başarılı", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Proje 'Yapılamıyor' olarak işaretlendi ve revizeye alındı!",
+                            "Başarılı", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else if (_activeJob.FieldStatus == 2)
                     {
-                        MessageBox.Show("Proje başarıyla tamamlandı! 'Tamamlanan İşler' alanına taşındı.", "Başarılı", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Proje başarıyla tamamlandı! 'Tamamlanan İşler' alanına taşındı.",
+                            "Başarılı", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {

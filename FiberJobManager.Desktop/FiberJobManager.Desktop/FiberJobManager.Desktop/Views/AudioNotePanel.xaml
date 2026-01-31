@@ -8,9 +8,7 @@
             <ColumnDefinition Width="450"/>
         </Grid.ColumnDefinitions>
 
-        <!-- ===================== -->
         <!-- SOL : SESLİ NOTLAR -->
-        <!-- ===================== -->
         <Border Grid.Column="0"
                 Background="White"
                 CornerRadius="12"
@@ -27,143 +25,145 @@
                             CornerRadius="8"
                             Padding="10"
                             Margin="0,0,0,20">
-                        <TextBlock Text="🎤  SESLİ NOTLAR"
-                                   FontSize="20"
+                        <TextBlock Text="SESLİ NOTLAR"
+                                   FontSize="18"
                                    FontWeight="Bold"
                                    Foreground="White"/>
                     </Border>
 
-                    <!-- ===================== -->
-                    <!-- SES NOTU 1 -->
-                    <!-- ===================== -->
-                    <Border x:Name="Card1"
-                            Background="#F8FAFC"
-                            CornerRadius="10"
-                            Padding="10"
-                            Height="56"
-                            Margin="0,0,0,10"
-                            BorderBrush="#CBD5E1"
-                            BorderThickness="1">
+                    <!-- SES KAYITLARI LİSTESİ -->
+                    <ItemsControl x:Name="AudioList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border x:Name="AudioCard"
+                                        Background="#F8FAFC"
+                                        CornerRadius="10"
+                                        Padding="12"
+                                        Margin="0,0,0,12"
+                                        BorderBrush="#CBD5E1"
+                                        BorderThickness="2">
 
-                        <Grid VerticalAlignment="Center">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="120"/>
-                            </Grid.ColumnDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
 
-                            <!-- MİKROFON = PLAY / STOP -->
-                            <Button Width="34"
-                                    Height="34"
-                                    Margin="0,0,10,0"
-                                    Background="#3B82F6"
-                                    Foreground="White"
-                                    BorderThickness="0"
-                                    FontSize="14"
-                                    Content="🎤"
-                                    Tag="0"
-                                    Click="PlayButton_Click"
-                                    Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}"
-                                                CornerRadius="17">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                                        <!-- PLAY/PAUSE BUTONU -->
+                                        <Button x:Name="PlayPauseBtn"
+                                                Width="44"
+                                                Height="44"
+                                                Margin="0,0,12,0"
+                                                Background="#22C55E"
+                                                BorderThickness="0"
+                                                Tag="{Binding}"
+                                                Click="PlayPauseButton_Click"
+                                                Cursor="Hand">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            CornerRadius="22"
+                                                            BorderThickness="0">
+                                                        <Viewbox Width="18" Height="18">
+                                                            <!-- PLAY İKONU (▶) - Default görünür -->
+                                                            <Canvas Width="24" Height="24" 
+                                                                    x:Name="PlayIcon">
+                                                                <Path Data="M8 5 L8 19 L19 12 Z"
+                                                                      Fill="White"/>
+                                                            </Canvas>
+                                                        </Viewbox>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
 
-                            <!-- METİN -->
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="Ses Notu 1"
-                                           FontSize="13"
-                                           FontWeight="SemiBold"
-                                           Foreground="#1E293B"/>
-                                <TextBlock Text="2:34 • 31.01.2026"
-                                           FontSize="10"
-                                           Foreground="#64748B"/>
-                            </StackPanel>
+                                        <!-- SES BİLGİLERİ VE İLERLEME -->
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
 
-                            <!-- SLIDER -->
-                            <Slider Grid.Column="2"
-                                    Width="110"
-                                    Height="20"
-                                    VerticalAlignment="Center"/>
-                        </Grid>
-                    </Border>
+                                            <!-- SES NUMARASI -->
+                                            <TextBlock Text="{Binding DisplayName}"
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       Margin="0,0,0,8"
+                                                       Foreground="#1E293B"/>
 
-                    <!-- ===================== -->
-                    <!-- SES NOTU 2 -->
-                    <!-- ===================== -->
-                    <Border x:Name="Card2"
-                            Background="#F8FAFC"
-                            CornerRadius="10"
-                            Padding="10"
-                            Height="56"
-                            Margin="0,0,0,10"
-                            BorderBrush="#CBD5E1"
-                            BorderThickness="1">
+                                            <!-- İLERLEME ÇUBUĞU CONTAINER -->
+                                            <Grid Margin="0,0,0,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
 
-                        <Grid VerticalAlignment="Center">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="120"/>
-                            </Grid.ColumnDefinitions>
+                                                <!-- Progress Container -->
+                                                <Canvas Grid.Column="0" 
+                                                        Height="4" 
+                                                        Margin="0,0,8,0"
+                                                        x:Name="ProgressCanvas"
+                                                        MouseLeftButtonDown="ProgressCanvas_MouseDown">
+                                                    <!-- Background Track -->
+                                                    <Border Canvas.Left="0"
+                                                            Canvas.Top="0"
+                                                            Width="{Binding ActualWidth, ElementName=ProgressCanvas}"
+                                                            Height="4"
+                                                            Background="#CBD5E1"
+                                                            CornerRadius="2"/>
 
-                            <Button Width="34"
-                                    Height="34"
-                                    Margin="0,0,10,0"
-                                    Background="#6366F1"
-                                    Foreground="White"
-                                    BorderThickness="0"
-                                    FontSize="14"
-                                    Content="🎤"
-                                    Tag="1"
-                                    Click="PlayButton_Click"
-                                    Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}"
-                                                CornerRadius="17">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                                                    <!-- Progress Bar -->
+                                                    <Border x:Name="ProgressBar"
+                                                            Canvas.Left="0"
+                                                            Canvas.Top="0"
+                                                            Height="4"
+                                                            Background="#3B82F6"
+                                                            CornerRadius="2"
+                                                            Width="{Binding ProgressWidth}"/>
+                                                </Canvas>
 
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="Ses Notu 2"
-                                           FontSize="13"
-                                           FontWeight="SemiBold"
-                                           Foreground="#1E293B"/>
-                                <TextBlock Text="1:12 • 31.01.2026"
-                                           FontSize="10"
-                                           Foreground="#64748B"/>
-                            </StackPanel>
+                                                <!-- SÜRE GÖSTERGESİ -->
+                                                <TextBlock Grid.Column="1"
+                                                           FontSize="11"
+                                                           Foreground="#64748B"
+                                                           VerticalAlignment="Center">
+                                                    <Run Text="{Binding CurrentPositionFormatted, Mode=OneWay}"/>
+                                                    <Run Text="/"/>
+                                                    <Run Text="{Binding DurationFormatted, Mode=OneWay}"/>
+                                                </TextBlock>
+                                            </Grid>
 
-                            <Slider Grid.Column="2"
-                                    Width="110"
-                                    Height="20"
-                                    VerticalAlignment="Center"/>
-                        </Grid>
-                    </Border>
+                                            <!-- TARİH SAATİ -->
+                                            <TextBlock Text="{Binding CreatedDateTimeFormatted}"
+                                                       FontSize="11"
+                                                       Foreground="#94A3B8"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Çalan ses için stil değişimi -->
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+                                            <Setter Property="Background" Value="#F8FAFC"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#3B82F6"/>
+                                                    <Setter Property="Background" Value="#EFF6FF"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
                 </StackPanel>
             </ScrollViewer>
         </Border>
 
-        <!-- ===================== -->
         <!-- SAĞ : NOTLAR -->
-        <!-- ===================== -->
         <Border Grid.Column="1"
-                Background="#FFFEF5"
+                Background="#FFFBEB"
                 CornerRadius="12"
                 Padding="20"
-                BorderBrush="#FCD34D"
+                BorderBrush="#FACC15"
                 BorderThickness="2">
 
             <Grid>
@@ -174,11 +174,10 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Margin="0,0,0,10">
-                    <TextBlock Text="📝 NOTLARIM"
+                    <TextBlock Text="NOTLARIM"
                                FontSize="18"
-                               FontWeight="Bold"
-                               Foreground="#92400E"/>
-                    <TextBlock Text="Ses kayıtlarından çıkardığınız notları buraya yazın"
+                               FontWeight="Bold"/>
+                    <TextBlock Text="Ses kayıtlarından çıkardığınız notlar"
                                FontSize="11"
                                Foreground="#78716C"/>
                 </StackPanel>
@@ -187,20 +186,21 @@
                          Grid.Row="1"
                          AcceptsReturn="True"
                          TextWrapping="Wrap"
-                         VerticalScrollBarVisibility="Auto"
                          Padding="10"
-                         FontSize="14"
-                         TextChanged="TxtNotes_TextChanged"/>
+                         TextChanged="TxtNotes_TextChanged"
+                         VerticalScrollBarVisibility="Auto"
+                         Background="White"
+                         BorderBrush="#D4D4D8"
+                         BorderThickness="1"/>
 
                 <TextBlock x:Name="TxtSaveStatus"
                            Grid.Row="2"
-                           Text="✅ Otomatik kaydedildi"
+                           Text="Otomatik kaydedildi"
                            FontSize="11"
-                           Foreground="#059669"
+                           Foreground="#16A34A"
                            HorizontalAlignment="Right"
                            Margin="0,10,0,0"/>
             </Grid>
         </Border>
-
     </Grid>
 </UserControl>
